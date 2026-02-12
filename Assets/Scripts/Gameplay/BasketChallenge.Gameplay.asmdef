@@ -1,0 +1,16 @@
+{
+    "name": "BasketChallenge.Gameplay",
+    "rootNamespace": "BasketChallenge.Gameplay",
+    "references": [
+        "GUID:cbe330feea5104d41ad1d0588abe93cc"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
