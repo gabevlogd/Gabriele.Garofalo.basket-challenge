@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0f53b77b5fb4ff8a04863f6e83580c5, type: 3}
+  m_Name: GameplayGameMode
+  m_EditorClassIdentifier: 
+  _gameModeName: GameplayGameMode
+  playerControllerClass: {fileID: 11400000, guid: 136d6cc10cba20941a1ce32a8d280297,
+    type: 2}
+  hudClass: {fileID: 11400000, guid: eb3dbc6659905c14788eff6a3a910d14, type: 2}
+  playerControllableClass: {fileID: 11400000, guid: f17ade8ccb9ad3a4f94048a89cdccbf5,
+    type: 2}

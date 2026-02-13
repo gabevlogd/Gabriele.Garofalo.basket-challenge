@@ -5,11 +5,12 @@ namespace BasketChallenge.Core
     [CreateAssetMenu(fileName = "SceneConfigData", menuName = "SceneConfigData", order = 0)]
     public class SceneConfigData : ScriptableObject
     {
-        public GameModeBase gameModePrefab;
+        //public GameModeBase gameModePrefab;
+        public GameModeClass gameModeClass;
         
         public bool IsValid()
         {
-            return gameModePrefab != null;
+            return gameModeClass != null;
         }
     }
 }

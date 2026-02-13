@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de329625cb67428a83c94f716eb18316, type: 3}
   m_Name: GameplaySceneData
   m_EditorClassIdentifier: 
-  gameModePrefab: {fileID: 8823934709873024821, guid: a03dc70f397f7d345b05c644680181cf,
-    type: 3}
+  gameModeClass: {fileID: 11400000, guid: 4172fb15fbbfc914d9995bc282a42928, type: 2}

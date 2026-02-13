@@ -2,27 +2,27 @@ using UnityEngine;
 
 namespace BasketChallenge.Core
 {
-    public class ControllerBase : MonoBehaviour
+    public abstract class ControllerBase : MonoBehaviour
     {
         [HideInInspector]
-        public ControllableGameObject controlledGameObject;
+        public ControllableBase controllableObject;
         
-        public void Possess(ControllableGameObject newGameObject)
+        public void Possess(ControllableBase newBase)
         {
-            if (newGameObject == null)
+            if (newBase == null)
             {
                 Debug.LogWarning("Attempting to possess a null game object.");
                 return;
             }
             
-            if (newGameObject == controlledGameObject) return;
+            if (newBase == controllableObject) return;
             
-            if (controlledGameObject != null)
+            if (controllableObject != null)
             {
-                controlledGameObject.OnUnpossess(this);
+                controllableObject.OnUnpossess(this);
             }
-            controlledGameObject = newGameObject;
-            controlledGameObject.OnPossess(this);
+            controllableObject = newBase;
+            controllableObject.OnPossess(this);
         }
     }
 }

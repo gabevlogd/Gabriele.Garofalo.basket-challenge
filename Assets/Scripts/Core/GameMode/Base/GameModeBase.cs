@@ -2,50 +2,61 @@ using UnityEngine;
 
 namespace BasketChallenge.Core
 {
+    /// <summary>
+    /// The GameModeBase class is responsible for managing the overall game state,
+    /// including player controllers, HUD, and player-controlled game objects.
+    /// It serves as a base class for specific game modes that can be implemented by inheriting from it.
+    /// The GameModeBase class initializes the player controller, HUD, and spawns the player-controlled game object at the start of the game.
+    /// It also handles the possession of the player-controlled game object by the player controller.
+    /// </summary>
     public class GameModeBase : Singleton<GameModeBase>
     {
         public PlayerController PlayerController { get; private set; }
-        public PlayerController playerControllerPrefab;
         
         public HUD HUD { get; private set; }
-        public HUD hudPrefab;
         
-        public ControllableGameObject PlayerControlledGameObject { get; private set; }
-        public ControllableGameObject playerControlledGameObjectPrefab;
+        public ControllableBase PlayerControllableObject { get; private set; }
         
-        public virtual bool Init()
+        public virtual bool Init(GameModeClass gameModeClass)
         {
-            if (!CreatePlayerController()) return false;
-            if (!CreateHUD()) return false;
-            SpawnPlayerControlledGameObject();
-            PlayerController.Possess(PlayerControlledGameObject);
+            if (!CreatePlayerController(gameModeClass.playerControllerClass)) return false;
+            if (!CreateHUD(gameModeClass.hudClass)) return false;
+            SpawnPlayerControlledGameObject(gameModeClass.playerControllableClass);
+            PlayerController.Possess(PlayerControllableObject);
             return true;
         }
         
-        private bool CreatePlayerController()
+        private bool CreatePlayerController(PlayerControllerClass controllerClass)
         {
-            if (playerControllerPrefab == null)
+            if (controllerClass == null || !controllerClass.IsValid())
             {
-                Debug.LogError("PlayerController prefab is not assigned.");
+                Debug.LogError("PlayerControllerClass is not valid.");
                 return false;
             }
-            PlayerController = Instantiate(playerControllerPrefab);
+
+            PlayerController = controllerClass.CreateController() as PlayerController;
             return true;
         }
 
-        private bool CreateHUD()
+        private bool CreateHUD(HUDClass hudClass)
         {
-            if (hudPrefab == null)
+            if (hudClass == null || !hudClass.IsValid())
             {
                 Debug.LogError("HUD prefab is not assigned.");
                 return false;
             }
-            HUD = Instantiate(hudPrefab);
+            HUD = Instantiate(hudClass.hudPrefab);
             return true;
         }
 
-        private void SpawnPlayerControlledGameObject()
+        private void SpawnPlayerControlledGameObject(ControllableClass playerControllableClass)
         {
+            if (playerControllableClass == null || !playerControllableClass.IsValid())
+            {
+                Debug.LogWarning("PlayerControllableClass is not valid.");
+                return;
+            }
+            
             // Find a PlayerStart in the scene to determine spawn position and rotation
             Vector3 spawnPosition = Vector3.zero;
             Quaternion spawnRotation = Quaternion.identity;
@@ -56,11 +67,11 @@ namespace BasketChallenge.Core
                 spawnRotation = playerStart.transform.rotation;
             }
             
-            if (playerControlledGameObjectPrefab == null)
+            if (playerControllableClass == null)
             {
                 return;
             }
-            PlayerControlledGameObject = Instantiate(playerControlledGameObjectPrefab, spawnPosition, spawnRotation);
+            PlayerControllableObject = Instantiate(playerControllableClass.controllablePrefab, spawnPosition, spawnRotation);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace BasketChallenge.Core
 {
-    public class PlayerController : ControllerBase
+    public class PlayerController : Controller
     {
         
     }

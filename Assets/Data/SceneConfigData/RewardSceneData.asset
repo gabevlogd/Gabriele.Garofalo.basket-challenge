@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de329625cb67428a83c94f716eb18316, type: 3}
   m_Name: RewardSceneData
   m_EditorClassIdentifier: 
-  gameModePrefab: {fileID: 3057743449984135731, guid: 7461d8cd36c7a6c47b7eb0755a70d8bb,
-    type: 3}
+  gameModeClass: {fileID: 11400000, guid: a64e95b4ded9e4945a5d10935787f900, type: 2}
