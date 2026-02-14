@@ -1,7 +1,7 @@
 using BasketChallenge.Core;
 using UnityEngine;
 
-namespace BasketChallenge.UI
+namespace BasketChallenge.Gameplay
 {
     public class GameplayHUD : HUD
     {

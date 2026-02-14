@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace BasketChallenge.UI
+namespace BasketChallenge.Gameplay
 {
     public class PauseMenu : MonoBehaviour
     {

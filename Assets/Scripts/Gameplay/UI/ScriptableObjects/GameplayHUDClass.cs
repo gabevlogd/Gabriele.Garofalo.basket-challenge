@@ -1,7 +1,7 @@
 using BasketChallenge.Core;
 using UnityEngine;
 
-namespace BasketChallenge.UI
+namespace BasketChallenge.Gameplay
 {
     [CreateAssetMenu(fileName = "GameplayHUD", menuName = "HUDs/GameplayHUD", order = 0)]
     public class GameplayHUDClass : HUDClass

@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace BasketChallenge.Core
 {
+    #if UNITY_EDITOR
     [CustomEditor(typeof(HUDClass), true)]
     public class HUDClassEditor : Editor
     {
@@ -50,4 +51,5 @@ namespace BasketChallenge.Core
             Debug.Log($"Prefab saved at: {path}");
         }
     }
+    #endif
 }
