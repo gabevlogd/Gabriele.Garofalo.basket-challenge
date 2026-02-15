@@ -17,5 +17,7 @@ namespace BasketChallenge.Core
 
         protected void EnableTouchEvents() => _inputComponent?.EnableTouchEvents();
         protected void DisableTouchEvents() => _inputComponent?.DisableTouchEvents();
+        protected void EnableMouseEvents() => _inputComponent?.EnableMouseEvents();
+        protected void DisableMouseEvents() => _inputComponent?.DisableMouseEvents();
     }
 }

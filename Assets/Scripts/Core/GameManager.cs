@@ -6,7 +6,7 @@ namespace BasketChallenge.Core
     /// <summary>
     /// The GameManager class is responsible for managing the overall game state, handling scene transitions, and providing global access to game-related functionality.
     /// It ensures that there is only one instance of the GameManager throughout the entire game lifecycle, making it a persistent singleton.
-    /// The GameManager initializes itself before any scene is loaded, allowing it to manage game state and handle scene transitions effectively.
+    /// The GameManager initializes itself before the first scene is loaded, allowing it to manage game state and handle scene transitions effectively.
     /// It also manages the current GameMode, which defines the rules and mechanics of the game for each scene.
     /// </summary>
     public class GameManager : PersistentSingleton<GameManager>

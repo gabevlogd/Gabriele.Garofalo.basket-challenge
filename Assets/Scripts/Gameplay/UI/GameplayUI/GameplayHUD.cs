@@ -6,7 +6,7 @@ namespace BasketChallenge.Gameplay
     public class GameplayHUD : HUD
     {
         [SerializeField]
-        private SwipeThrowPowerView _swipeThrowPowerView;
+        private ThrowPowerView throwPowerView;
         
         [SerializeField]
         private PauseMenu _pauseMenu;
@@ -19,7 +19,7 @@ namespace BasketChallenge.Gameplay
                 return;
             }
             
-            if (_swipeThrowPowerView == null)
+            if (throwPowerView == null)
             {
                 Debug.LogError("Swipe Throw Power View reference is missing in GameplayHUD.");
                 return;

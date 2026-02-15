@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -55}
+  m_AnchoredPosition: {x: 0, y: -100}
   m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3961430725709499623
@@ -153,7 +153,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
@@ -359,7 +359,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvas: {fileID: 5042109675455709133}
-  _swipeThrowPowerView: {fileID: 613673798001556540}
+  throwPowerView: {fileID: 613673798001556540}
   _pauseMenu: {fileID: 5961465466365506196}
 --- !u!1001 &3560124916044483899
 PrefabInstance:
@@ -372,6 +372,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PauseMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 5485498388570390636, guid: 50af2d360da66724a9d30dff122f7b96,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5485498388570390636, guid: 50af2d360da66724a9d30dff122f7b96,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5485498388570390636, guid: 50af2d360da66724a9d30dff122f7b96,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5485498388570390636, guid: 50af2d360da66724a9d30dff122f7b96,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6183373599268676757, guid: 50af2d360da66724a9d30dff122f7b96,
         type: 3}
@@ -556,10 +576,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6786903913894938714, guid: 4227ee2bd5bc87f44be656d17cef8ce7,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6786903913894938714, guid: 4227ee2bd5bc87f44be656d17cef8ce7,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6786903913894938714, guid: 4227ee2bd5bc87f44be656d17cef8ce7,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8004501916689913896, guid: 4227ee2bd5bc87f44be656d17cef8ce7,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8004501916689913896, guid: 4227ee2bd5bc87f44be656d17cef8ce7,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8004501916689913896, guid: 4227ee2bd5bc87f44be656d17cef8ce7,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8004501916689913896, guid: 4227ee2bd5bc87f44be656d17cef8ce7,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8529393591685787047, guid: 4227ee2bd5bc87f44be656d17cef8ce7,
         type: 3}
       propertyPath: m_Name
-      value: SwipeThrowPowerView
+      value: ThrowPowerView
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4227ee2bd5bc87f44be656d17cef8ce7, type: 3}
