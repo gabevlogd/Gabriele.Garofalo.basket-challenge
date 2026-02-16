@@ -124,7 +124,7 @@ namespace BasketChallenge.Gameplay
             {
                 ThrowCompleted(_lastPowerAmount);
             }
-            else
+            else if (_lastPowerAmount > 0f)
             {
                 ThrowCanceled();
             }
@@ -138,6 +138,7 @@ namespace BasketChallenge.Gameplay
 
         private void ResetThrow()
         {
+            _lastPowerAmount = 0f;
             GameplayPlayerController.OnThrowInputMovedEvent -= ThrowInputMoved;
             GameplayPlayerController.OnThrowInputMovedEvent -= ThrowStartCheck;
             if (_throwTimeoutCoroutine != null)

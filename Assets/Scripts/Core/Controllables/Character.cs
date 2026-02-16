@@ -7,11 +7,12 @@ namespace BasketChallenge.Core
     [RequireComponent(typeof(SkinnedMeshComponent))]
     public class Character : ControllableBase
     {
-        public SkinnedMeshComponent SkinnedMeshComponent { get; private set; }
+        [HideInInspector]
+        public SkinnedMeshComponent skinnedMeshComponent;
 
-        private void Awake()
+        protected virtual void Awake()
         {
-            if (!TryGetComponent(out SkinnedMeshComponent SkinnedMeshComponent))
+            if (!TryGetComponent(out skinnedMeshComponent))
             {
                 Debug.LogError("Character requires a SkinnedMeshComponent, but none was found on the GameObject.");
             }

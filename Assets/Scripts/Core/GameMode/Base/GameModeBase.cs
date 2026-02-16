@@ -20,9 +20,9 @@ namespace BasketChallenge.Core
         public virtual bool Init(GameModeClass gameModeClass)
         {
             if (!CreatePlayerController(gameModeClass.playerControllerClass)) return false;
-            if (!CreateHUD(gameModeClass.hudClass)) return false;
             SpawnPlayerControlledGameObject(gameModeClass.playerControllableClass);
             PlayerController.Possess(PlayerControllableObject);
+            if (!CreateHUD(gameModeClass.hudClass)) return false;
             return true;
         }
         

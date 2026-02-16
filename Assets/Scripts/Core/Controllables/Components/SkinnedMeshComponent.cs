@@ -17,29 +17,17 @@ namespace BasketChallenge.Core
         /// If the socket is not found, it logs a warning and returns null.
         /// </summary>
         /// <param name="socketName"></param>
+        /// <param name="socketTransform"></param>
         /// <returns></returns>
-        public GameObject TryGetSocket(string socketName)
+        public bool TryGetSocketTransform(string socketName, out Transform socketTransform)
         {
-            Transform socketTransform = _skinnedMesh.transform.Find(socketName);
-            if (socketTransform == null)
+            socketTransform = _skinnedMesh.transform.Find(socketName);
+            if (!socketTransform)
             {
                 Debug.LogWarning($"Socket '{socketName}' not found in SkinnedMeshComponent.");
-                return null;
+                return false;
             }
-            return socketTransform.gameObject;
-        }
-        
-        /// <summary>
-        /// Tries to find a socket's Transform by name under the SkinnedMesh.
-        /// This is a convenience method that calls TryGetSocket and returns the Transform directly.
-        /// If the socket is not found, it logs a warning and returns null
-        /// </summary>
-        /// <param name="socketName"></param>
-        /// <returns></returns>
-        public Transform TryGetSocketTransform(string socketName)
-        {
-            GameObject go = TryGetSocket(socketName);
-            return go != null ? go.transform : null;
+            return true;
         }
 
         
