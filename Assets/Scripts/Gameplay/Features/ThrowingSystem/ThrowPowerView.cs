@@ -73,8 +73,8 @@ namespace BasketChallenge.Gameplay
 
             ThrowPowerRangesRuntime r = processor.CalculateRanges(perfectPower);
 
-            SetRangeRect(perfectThrowImage, r.perfectMin, r.perfectMax);
-            SetRangeRect(backboardThrowImage, r.backboardMin, r.backboardMax);
+            SetRangeRect(perfectThrowImage, r.PerfectMin, r.PerfectMax);
+            SetRangeRect(backboardThrowImage, r.BackboardMin, r.BackboardMax);
         }
         
         private static void SetRangeRect(Image img, float min01, float max01)

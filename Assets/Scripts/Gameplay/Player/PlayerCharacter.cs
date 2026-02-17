@@ -7,8 +7,6 @@ namespace BasketChallenge.Gameplay
     [RequireComponent(typeof(ThrowerComponent))]
     public class PlayerCharacter : Character
     {
-        // Temporary target position for testing purposes
-        public Transform tempTargetPosition;
         
         [SerializeField]
         private Transform ballSocket;
@@ -27,7 +25,7 @@ namespace BasketChallenge.Gameplay
                 Debug.LogError("PlayerCharacter requires a ThrowerComponent to function properly.");
             }
             _currentBall = FindObjectOfType<BasketBall>();
-            tempTargetPosition = GameObject.Find("PerfectThrow").transform; // Ensure this GameObject exists in the scene
+            _currentBall.BallOwner = this;
         }
 
         private void Start()
@@ -53,13 +51,14 @@ namespace BasketChallenge.Gameplay
                 return;
             }
             _currentBall.transform.position = ballSocket.position;
-            _throwerComponent.Throw(_currentBall.Rigidbody, tempTargetPosition.position, powerAmount);
+            ThrowOutcome throwOutcome = _throwerComponent.Throw(_currentBall.Rigidbody, BasketBackboard.GetPerfectShotPosition(), powerAmount);
+            _currentBall.OnBallThrown(throwOutcome);
         }
 
         [ContextMenu("Temp")]
         private void Temp()
         {
-            _throwerComponent.UpdatePerfectPower(tempTargetPosition.position, ballSocket.position);
+            _throwerComponent.UpdatePerfectPower(BasketBackboard.GetPerfectShotPosition(), ballSocket.position);
         }
         
         

@@ -1,7 +1,6 @@
 using System;
 using BasketChallenge.Core;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace BasketChallenge.Gameplay
 {
@@ -24,6 +23,8 @@ namespace BasketChallenge.Gameplay
         [SerializeField]
         private ThrowPowerProcessor powerProcessor = new ThrowPowerProcessor();
         
+        private ThrowOutcome _lastThrowOutcome;
+        
         public event Action<float> OnPerfectPowerUpdated;
 
         public void UpdatePerfectPower(Vector3 targetPosition, Vector3 startPosition)
@@ -32,12 +33,12 @@ namespace BasketChallenge.Gameplay
             OnPerfectPowerUpdated?.Invoke(perfectPower);
         }
 
-        public void Throw(Rigidbody objectToThrow, Vector3 targetPosition, float powerAmount = -1f)
+        public ThrowOutcome Throw(Rigidbody objectToThrow, Vector3 targetPosition, float powerAmount = -1f)
         {
             if (objectToThrow == null)
             {
                 Debug.LogError("Object to throw is null. Cannot perform throw.");
-                return;
+                return ThrowOutcome.None;
             }
             
             Debugger.DrawDebugSphere(targetPosition, 0.5f, Color.green, 5f);
@@ -45,17 +46,21 @@ namespace BasketChallenge.Gameplay
             {
                 targetPosition = GetAdjustedTargetPosition(powerAmount, objectToThrow.transform.position, targetPosition);
             }
-            objectToThrow.velocity = GetThrowVelocity(targetPosition, objectToThrow.transform.position);
+
+            bool preferLowAngle = _lastThrowOutcome is ThrowOutcome.BackboardMake or ThrowOutcome.BackboardMiss;
+            objectToThrow.velocity = GetThrowVelocity(targetPosition, objectToThrow.transform.position, preferLowAngle);
             Debugger.DrawDebugSphere(targetPosition, 0.5f, Color.red, 5f);
+            
+            return _lastThrowOutcome;
         }
         
         private Vector3 GetAdjustedTargetPosition(float powerAmount, Vector3 startPosition, Vector3 targetPosition)
         {
             powerAmount = Mathf.Clamp(powerAmount, 0f, 1f);
             float perfectPowerAmount = GetPerfectPowerAmount(targetPosition, startPosition);
-            ThrowOutcome outcome = powerProcessor.EvaluateThrowOutcome(powerAmount, perfectPowerAmount);
-            Debug.Log(outcome);
-            return targetPosition + CalculateAdjustment(outcome, startPosition, targetPosition, powerAmount, perfectPowerAmount);
+            _lastThrowOutcome  = powerProcessor.EvaluateThrowOutcome(powerAmount, perfectPowerAmount);
+            Debug.Log(_lastThrowOutcome);
+            return targetPosition + CalculateAdjustment(_lastThrowOutcome, startPosition, targetPosition, powerAmount, perfectPowerAmount);
         }
         
         private float GetPerfectPowerAmount(Vector3 targetPosition, Vector3 startPosition)
@@ -81,10 +86,10 @@ namespace BasketChallenge.Gameplay
                     adjustment = GetRimAdjustment(startPosition, targetPosition, false);
                     break;
                 case ThrowOutcome.BackboardMake:
-                    // TODO: Implement backboard make adjustment logic. This could involve calculating a new target position that simulates the ball hitting the backboard and then going into the basket, which would likely involve a small horizontal adjustment away from the backboard and a vertical adjustment to account for the bounce off the backboard.
+                    adjustment = GetBackboardMakeAdjustment(startPosition, targetPosition);
                     break;
                 case ThrowOutcome.BackboardMiss:
-                    // TODO: Implement backboard miss adjustment logic. This could involve calculating a new target position that simulates the ball hitting the backboard and then missing the basket, which would likely involve a combination of horizontal and vertical adjustments based on the angle of the throw and the position of the backboard.
+                    adjustment = GetBackboardMissAdjustment(targetPosition);
                     break;
                 case ThrowOutcome.ShortMiss:
                     adjustment = GetMissAdjustment(startPosition, targetPosition, powerAmount, perfectPowerAmount, true);
@@ -92,6 +97,8 @@ namespace BasketChallenge.Gameplay
                 case ThrowOutcome.LongMiss:
                     adjustment = GetMissAdjustment(startPosition, targetPosition, powerAmount, perfectPowerAmount, false);
                     break;
+                case ThrowOutcome.None:
+                    return Vector3.zero;
             }
 
             return adjustment;
@@ -110,6 +117,30 @@ namespace BasketChallenge.Gameplay
             float lerpAlpha = isShortMiss ? (perfectPowerAmount - powerAmount) : (powerAmount - perfectPowerAmount);
             float adjustment = Mathf.Lerp(0f, 1f, lerpAlpha);
             return horizontalDistance * (adjustment * (isShortMiss ? -1f : 1f));
+        }
+        
+        private Vector3 GetBackboardMakeAdjustment(Vector3 startPosition, Vector3 targetPosition)
+        {
+            Transform backboardPosition = BasketBackboard.GetNearestBackboardThrowPosition(startPosition);
+            if (backboardPosition == null)
+            {
+                Debug.LogWarning("No backboard throw positions available. Cannot calculate backboard make adjustment.");
+                return Vector3.zero;
+            }
+            
+            return backboardPosition.position - targetPosition;
+        }
+        
+        private Vector3 GetBackboardMissAdjustment(Vector3 targetPosition)
+        {
+            Transform backboardPosition = BasketBackboard.GetRandomBackboardThrowPosition();
+            if (backboardPosition == null)
+            {
+                Debug.LogWarning("No backboard throw positions available. Cannot calculate backboard miss adjustment.");
+                return Vector3.zero;
+            }
+            
+            return backboardPosition.position - targetPosition;
         }
 
         /// <summary>

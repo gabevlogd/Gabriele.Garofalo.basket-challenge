@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ranges:
     perfectHalfWidth: 0.04
-    rimExtraWidth: 0.02
-    backboardOffset: 0.05
-    backboardWidth: 0.05
+    rimExtraWidth: 0.03
+    backboardOffset: 0.04
+    backboardWidth: 0.06

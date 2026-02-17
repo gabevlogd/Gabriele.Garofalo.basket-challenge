@@ -14,23 +14,24 @@ namespace BasketChallenge.Gameplay
     
     public readonly struct ThrowPowerRangesRuntime
     {
-        public readonly float perfectMin;
-        public readonly float perfectMax;
-        public readonly float backboardMin;
-        public readonly float backboardMax;
-        public readonly float rimMin;
-        public readonly float rimMax;
+        public readonly float PerfectMin;
+        public readonly float PerfectMax;
+        public readonly float BackboardMin;
+        public readonly float BackboardMax;
+        public readonly float RimMin;
+        public readonly float RimMax;
 
         public ThrowPowerRangesRuntime(float pMin, float pMax, float bMin, float bMax, float rMin, float rMax)
         {
-            perfectMin = pMin; perfectMax = pMax;
-            backboardMin = bMin; backboardMax = bMax;
-            rimMin = rMin; rimMax = rMax;
+            PerfectMin = pMin; PerfectMax = pMax;
+            BackboardMin = bMin; BackboardMax = bMax;
+            RimMin = rMin; RimMax = rMax;
         }
     }
     
     public enum ThrowOutcome
     {
+        None,
         Perfect,
         NearRim,
         FarRim,
@@ -73,9 +74,9 @@ namespace BasketChallenge.Gameplay
             throwPower   = Mathf.Clamp01(throwPower);
             
             ThrowPowerRangesRuntime currentRanges = CalculateRanges(perfectPower);
-            float pMin = currentRanges.perfectMin; float pMax = currentRanges.perfectMax;
-            float bMin = currentRanges.backboardMin; float bMax = currentRanges.backboardMax;
-            float rimMin = currentRanges.rimMin; float rimMax = currentRanges.rimMax;
+            float pMin = currentRanges.PerfectMin; float pMax = currentRanges.PerfectMax;
+            float bMin = currentRanges.BackboardMin; float bMax = currentRanges.BackboardMax;
+            float rimMin = currentRanges.RimMin; float rimMax = currentRanges.RimMax;
 
             // Evaluation 
             bool inBackboard = throwPower >= bMin && throwPower <= bMax;
