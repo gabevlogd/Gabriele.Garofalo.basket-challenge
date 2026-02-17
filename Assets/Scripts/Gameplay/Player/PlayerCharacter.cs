@@ -4,7 +4,7 @@ using BasketChallenge.Core;
 
 namespace BasketChallenge.Gameplay
 {
-    [RequireComponent(typeof(ThrowerComponent))]
+    [RequireComponent(typeof(ThrowerComponent), typeof(ScoreReceiver))]
     public class PlayerCharacter : Character
     {
         

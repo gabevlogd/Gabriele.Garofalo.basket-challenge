@@ -1,7 +1,6 @@
 using System;
 using BasketChallenge.Core;
 using UnityEngine;
-using UnityEngine.XR;
 
 namespace BasketChallenge.Gameplay
 {
@@ -15,8 +14,11 @@ namespace BasketChallenge.Gameplay
         public Rigidbody Rigidbody => _rigidbody;
         private Rigidbody _rigidbody;
 
-        private ThrowOutcome _lastThrowOutcome;
+        public ThrowOutcome LastThrowOutcome { get; private set; }
 
+        [HideInInspector]
+        public bool hasScored;
+        
         private int _collisionCount;
         
         protected void Awake()
@@ -35,8 +37,9 @@ namespace BasketChallenge.Gameplay
         
         public void OnBallThrown(ThrowOutcome throwOutcome)
         {
-            _lastThrowOutcome = throwOutcome;
+            LastThrowOutcome = throwOutcome;
             _collisionCount = 0;
+            hasScored = false;
         }
         
         private void HandleFirstCollision(Collision collision)
@@ -46,7 +49,7 @@ namespace BasketChallenge.Gameplay
 
             _collisionCount++;
 
-            switch (_lastThrowOutcome)
+            switch (LastThrowOutcome)
             {
                 case ThrowOutcome.Perfect:
                 case ThrowOutcome.NearRim:

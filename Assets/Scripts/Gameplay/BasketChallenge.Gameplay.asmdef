@@ -2,7 +2,8 @@
     "name": "BasketChallenge.Gameplay",
     "rootNamespace": "BasketChallenge.Gameplay",
     "references": [
-        "GUID:cbe330feea5104d41ad1d0588abe93cc"
+        "GUID:cbe330feea5104d41ad1d0588abe93cc",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -6,7 +6,7 @@ namespace BasketChallenge.Gameplay
 {
     public class ScoreDetector : MonoBehaviour
     {
-        private static event Action<Character> OnScoreDetected;
+        public static event Action<Character, ThrowOutcome> OnScoreDetected;
         
         private Collider _ballChecker;
 
@@ -22,8 +22,17 @@ namespace BasketChallenge.Gameplay
         {
             if (other.TryGetComponent(out BasketBall ball))
             {
-                OnScoreDetected?.Invoke(ball.BallOwner);
-                Debug.Log("Score detected");
+                if (ball.LastThrowOutcome is ThrowOutcome.None or ThrowOutcome.LongMiss or ThrowOutcome.ShortMiss or ThrowOutcome.BackboardMiss)
+                {
+                    Debug.Log("Score detection ignored due to throw outcome: " + ball.LastThrowOutcome);
+                    return;
+                }
+
+                // Prevent multiple score detections for the same throw
+                if (ball.hasScored) return;
+                
+                ball.hasScored = true;
+                OnScoreDetected?.Invoke(ball.BallOwner, ball.LastThrowOutcome);
             }
         }
     }
