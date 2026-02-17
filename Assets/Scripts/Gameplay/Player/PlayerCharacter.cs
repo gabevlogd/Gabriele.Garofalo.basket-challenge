@@ -10,10 +10,9 @@ namespace BasketChallenge.Gameplay
         
         [SerializeField]
         private Transform ballSocket;
-        
-        private BasketBall _currentBall;
-        
-        
+
+        public BasketBall CurrentBall { get; private set; }
+
         private ThrowerComponent _throwerComponent;
         public ThrowerComponent ThrowerComponent => _throwerComponent;
         
@@ -24,8 +23,8 @@ namespace BasketChallenge.Gameplay
             {
                 Debug.LogError("PlayerCharacter requires a ThrowerComponent to function properly.");
             }
-            _currentBall = FindObjectOfType<BasketBall>();
-            _currentBall.BallOwner = this;
+            CurrentBall = FindObjectOfType<BasketBall>();
+            CurrentBall.BallOwner = this;
         }
 
         private void Start()
@@ -45,14 +44,14 @@ namespace BasketChallenge.Gameplay
 
         private void ThrowBall(float powerAmount)
         {
-            if (_currentBall == null)
+            if (CurrentBall == null)
             {
                 Debug.LogWarning("No ball to throw.");
                 return;
             }
-            _currentBall.transform.position = ballSocket.position;
-            ThrowOutcome throwOutcome = _throwerComponent.Throw(_currentBall.Rigidbody, BasketBackboard.GetPerfectShotPosition(), powerAmount);
-            _currentBall.OnBallThrown(throwOutcome);
+            CurrentBall.transform.position = ballSocket.position;
+            ThrowOutcome throwOutcome = _throwerComponent.Throw(CurrentBall.Rigidbody, BasketBackboard.GetPerfectShotPosition(), powerAmount);
+            CurrentBall.OnBallThrown(throwOutcome);
         }
 
         [ContextMenu("Temp")]

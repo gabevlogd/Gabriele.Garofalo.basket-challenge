@@ -33,14 +33,13 @@ namespace BasketChallenge.Gameplay
             SwipeThrowController.OnThrowPowerUpdated += UpdateSliderFill;
             SwipeThrowController.OnThrowCanceled += ResetSliderFill;
 
-            if (GameModeBase.Instance.PlayerControllableObject.TryGetComponent(out ThrowerComponent thrower))
+            if (CoreUtility.TryGetPlayerControlledObject(out PlayerCharacter playerCharacter))
             {
-                thrower.OnPerfectPowerUpdated -= OnPerfectPowerUpdated;
-                thrower.OnPerfectPowerUpdated += OnPerfectPowerUpdated;
-            }
-            else
-            {
-                Debug.LogError("PlayerControllableObject does not have a ThrowerComponent. ThrowPowerView will not function properly.");
+                if (playerCharacter.TryGetComponent(out ThrowerComponent thrower))
+                {
+                    thrower.OnPerfectPowerUpdated -= OnPerfectPowerUpdated;
+                    thrower.OnPerfectPowerUpdated += OnPerfectPowerUpdated;
+                }
             }
         }
         

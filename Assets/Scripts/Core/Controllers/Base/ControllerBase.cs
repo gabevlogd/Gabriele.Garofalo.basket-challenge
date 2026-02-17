@@ -4,8 +4,7 @@ namespace BasketChallenge.Core
 {
     public abstract class ControllerBase : MonoBehaviour
     {
-        [HideInInspector]
-        public ControllableBase controllableObject;
+        public ControllableBase ControllableObject { get; private set; }
         
         public void Possess(ControllableBase newBase)
         {
@@ -15,14 +14,18 @@ namespace BasketChallenge.Core
                 return;
             }
             
-            if (newBase == controllableObject) return;
+            if (newBase == ControllableObject) return;
             
-            if (controllableObject != null)
+            if (ControllableObject != null)
             {
-                controllableObject.OnUnpossess(this);
+                ControllableObject.OnUnpossess(this);
             }
-            controllableObject = newBase;
-            controllableObject.OnPossess(this);
+            ControllableObject = newBase;
+            ControllableObject.OnPossess(this);
+        }
+
+        public virtual void SetConfig(ControllerClass config) 
+        {
         }
     }
 }

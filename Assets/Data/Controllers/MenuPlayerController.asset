@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c77baf5f4d642549b960c40f2d0ceba, type: 3}
   m_Name: MenuPlayerController
   m_EditorClassIdentifier: 
-  _controllerName: MenuPlayerController
+  controllerName: MenuPlayerController
+  playerCameraManager: {fileID: 0}

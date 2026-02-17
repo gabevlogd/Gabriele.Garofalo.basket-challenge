@@ -8,6 +8,8 @@ namespace BasketChallenge.Gameplay
     [RequireComponent(typeof(Rigidbody), typeof(SphereCollider))]
     public class BasketBall : MonoBehaviour
     {
+        public event Action<Collision> OnBallCollisionEnter;
+        
         public Character BallOwner { get; set; }
         
         public Rigidbody Rigidbody => _rigidbody;
@@ -25,18 +27,10 @@ namespace BasketChallenge.Gameplay
             }
         }
 
-        private void Update()
-        {
-            // keep ball rotation oriented towards the direction of movement for better visual effect
-            if (Rigidbody.velocity.sqrMagnitude > 0.1f)
-            {                
-                transform.rotation = Quaternion.LookRotation(Rigidbody.velocity);
-            }
-        }
-
         private void OnCollisionEnter(Collision other)
         {
             HandleFirstCollision(other);
+            OnBallCollisionEnter?.Invoke(other);
         }
         
         public void OnBallThrown(ThrowOutcome throwOutcome)
