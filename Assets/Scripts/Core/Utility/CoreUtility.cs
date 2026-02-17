@@ -56,5 +56,26 @@ namespace BasketChallenge.Core
 
             return GameModeBase.Instance.HUD.TryGetComponent(out hud);
         }
+        
+        public static bool TryGetPlayerCameraManager<T>(out T cameraManager) where T : PlayerCameraManager
+        {
+            cameraManager = null;
+            if (GameModeBase.Instance == null)
+            {
+                return false;
+            }
+
+            if (GameModeBase.Instance.PlayerController == null)
+            {
+                return false;
+            }
+            
+            if (GameModeBase.Instance.PlayerController.CameraManager == null)
+            {
+                return false;
+            }
+            
+            return GameModeBase.Instance.PlayerController.CameraManager.TryGetComponent(out cameraManager);
+        }
     }
 }

@@ -17,5 +17,5 @@ MonoBehaviour:
   useCameraViewpointRotation: 0
   enableCameraLag: 1
   enableCameraRotationLag: 0
-  cameraLagSpeed: 1
+  cameraLagSpeed: 0.5
   cameraRotationLagSpeed: 1

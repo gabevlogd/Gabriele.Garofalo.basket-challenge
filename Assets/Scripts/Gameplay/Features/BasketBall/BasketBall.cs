@@ -58,7 +58,7 @@ namespace BasketChallenge.Gameplay
                     ApplyVelocityCorrectionToScore();
                     break;
                 case ThrowOutcome.BackboardMiss:
-                    ApplyVelocityCorrectionToNegateScore();
+                    ApplyVelocityCorrectionToNegateScore(collision);
                     break;
                 case ThrowOutcome.LongMiss:
                 case ThrowOutcome.ShortMiss:
@@ -75,11 +75,22 @@ namespace BasketChallenge.Gameplay
             Rigidbody.velocity = correction * speed;
         }
 
-        private void ApplyVelocityCorrectionToNegateScore()
+        private void ApplyVelocityCorrectionToNegateScore(Collision collision)
         {
             float speed = Rigidbody.velocity.magnitude;
-            Vector3 correction = transform.position - BasketBackboard.GetPerfectShotPosition();
-            Rigidbody.velocity = correction * speed;
+            Rigidbody.velocity = collision.GetContact(0).normal * speed;
+        }
+        
+        public void EnablePhysics()
+        {
+            Rigidbody.isKinematic = false;
+        }
+        
+        public void DisablePhysics()
+        {
+            Rigidbody.velocity = Vector3.zero;
+            Rigidbody.angularVelocity = Vector3.zero;
+            Rigidbody.isKinematic = true;
         }
     }
 }

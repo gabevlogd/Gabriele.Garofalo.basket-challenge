@@ -56,13 +56,17 @@ namespace BasketChallenge.Core
             Camera playerCamera = null;
             
             // Search for an existing Camera component in the ControllableObject's children
-            foreach (Transform child in ControllableObject.transform)
+            Transform[] allChildTransforms = ControllableObject.GetComponentsInChildren<Transform>(true);
+            foreach (Transform child in allChildTransforms)
             {
-               if (child.TryGetComponent(out Camera foundCamera))
-               {
-                   playerCamera = foundCamera;
-                   break;
-               }
+                if (child == ControllableObject.transform)
+                    continue; 
+                
+                if (child.TryGetComponent(out Camera foundCamera))
+                {
+                    playerCamera = foundCamera;
+                    break;
+                }
             }
             
             // If no Camera component is found, create a new one and parent it to the ControllableObject

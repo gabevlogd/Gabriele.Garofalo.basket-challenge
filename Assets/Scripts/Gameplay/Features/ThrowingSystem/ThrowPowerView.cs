@@ -32,6 +32,7 @@ namespace BasketChallenge.Gameplay
             UpdateSliderFill(0f);
             SwipeThrowController.OnThrowPowerUpdated += UpdateSliderFill;
             SwipeThrowController.OnThrowCanceled += ResetSliderFill;
+            PlayerCharacter.OnThrowResetEvent += ResetSliderFill;
 
             if (CoreUtility.TryGetPlayerControlledObject(out PlayerCharacter playerCharacter))
             {
@@ -47,6 +48,7 @@ namespace BasketChallenge.Gameplay
         {
             SwipeThrowController.OnThrowPowerUpdated -= UpdateSliderFill;
             SwipeThrowController.OnThrowCanceled -= ResetSliderFill;
+            PlayerCharacter.OnThrowResetEvent -= ResetSliderFill;
         }
 
         private void UpdateSliderFill(float fillAmount)

@@ -12,11 +12,8 @@ namespace BasketChallenge.Gameplay
         
         private void OnEnable()
         {
-            PauseMenu.OnPauseMenuOpened += DisableTouchEvents;
-            PauseMenu.OnPauseMenuClosed += EnableTouchEvents;
-            
-            PauseMenu.OnPauseMenuOpened += DisableMouseEvents;
-            PauseMenu.OnPauseMenuClosed += EnableMouseEvents;
+            PauseMenu.OnPauseMenuOpened += DisableThrowInput;
+            PauseMenu.OnPauseMenuClosed += EnableThrowInput;
             
             TouchManager.OnTouchBeganEvent += ThrowInputBegan;
             TouchManager.OnTouchMovedEvent += ThrowInputMoved;
@@ -25,15 +22,15 @@ namespace BasketChallenge.Gameplay
             MouseManager.OnMouseLeftDownEvent += ThrowInputBegan;
             MouseManager.OnMouseMovedEvent += ThrowInputMoved;
             MouseManager.OnMouseLeftUpEvent += ThrowInputEnded;
+            
+            SwipeThrowController.OnThrowCompleted += DisableThrowInput;
+            PlayerCharacter.OnThrowResetEvent += EnableThrowInput;
         }
         
         private void OnDisable()
         {
-            PauseMenu.OnPauseMenuOpened -= DisableTouchEvents;
-            PauseMenu.OnPauseMenuClosed -= EnableTouchEvents;
-            
-            PauseMenu.OnPauseMenuOpened -= DisableMouseEvents;
-            PauseMenu.OnPauseMenuClosed -= EnableMouseEvents;
+            PauseMenu.OnPauseMenuOpened -= DisableThrowInput;
+            PauseMenu.OnPauseMenuClosed -= EnableThrowInput;
             
             TouchManager.OnTouchBeganEvent -= ThrowInputBegan;
             TouchManager.OnTouchMovedEvent -= ThrowInputMoved;
@@ -42,6 +39,9 @@ namespace BasketChallenge.Gameplay
             MouseManager.OnMouseLeftDownEvent -= ThrowInputBegan;
             MouseManager.OnMouseMovedEvent -= ThrowInputMoved;
             MouseManager.OnMouseLeftUpEvent -= ThrowInputEnded;
+            
+            SwipeThrowController.OnThrowCompleted -= DisableThrowInput;
+            PlayerCharacter.OnThrowResetEvent -= EnableThrowInput;
         }
         
         private void ThrowInputBegan() => OnThrowInputBeganEvent?.Invoke();
@@ -55,6 +55,23 @@ namespace BasketChallenge.Gameplay
                 return TouchManager.AnyTouch() ? Input.GetTouch(0).position : Vector3.zero;
             }
             return Input.mousePosition;
+        }
+
+        private void DisableThrowInput(float f)
+        {
+            DisableThrowInput();
+        }
+
+        private void DisableThrowInput()
+        {
+            DisableTouchEvents();
+            DisableMouseEvents();
+        }
+        
+        private void EnableThrowInput()
+        {
+            EnableTouchEvents();
+            EnableMouseEvents();
         }
     }
 }

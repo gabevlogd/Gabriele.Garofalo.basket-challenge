@@ -1,35 +1,36 @@
 using System;
-using UnityEngine;
 using BasketChallenge.Core;
+using UnityEngine;
 
 namespace BasketChallenge.Gameplay
 {
     [RequireComponent(typeof(ThrowerComponent), typeof(ScoreReceiver))]
-    public class PlayerCharacter : Character
+    public class PlayerCharacter : ShootingCharacter
     {
-        
         [SerializeField]
         private Transform ballSocket;
+        
+        [SerializeField]
+        private Transform cameraHolder;
 
         public BasketBall CurrentBall { get; private set; }
 
-        private ThrowerComponent _throwerComponent;
-        public ThrowerComponent ThrowerComponent => _throwerComponent;
+        public static event Action OnThrowResetEvent;
         
         protected override void Awake()
         {
             base.Awake();
-            if (!TryGetComponent(out _throwerComponent))
-            {
-                Debug.LogError("PlayerCharacter requires a ThrowerComponent to function properly.");
-            }
+            
+            // TODO: handle ball spawning properly, this is just a temporary solution to get things working
             CurrentBall = FindObjectOfType<BasketBall>();
             CurrentBall.BallOwner = this;
+            CurrentBall.DisablePhysics();
+            CurrentBall.transform.position = ballSocket.position;
         }
 
         private void Start()
         {
-            Temp();
+            ThrowerComponent.UpdatePerfectPower(BasketBackboard.GetPerfectShotPosition(), ballSocket.position);
         }
 
         private void OnEnable()
@@ -41,25 +42,37 @@ namespace BasketChallenge.Gameplay
         {
             SwipeThrowController.OnThrowCompleted -= ThrowBall;
         }
-
+        
         private void ThrowBall(float powerAmount)
         {
-            if (CurrentBall == null)
+            if (!CurrentBall)
             {
                 Debug.LogWarning("No ball to throw.");
                 return;
             }
-            CurrentBall.transform.position = ballSocket.position;
-            ThrowOutcome throwOutcome = _throwerComponent.Throw(CurrentBall.Rigidbody, BasketBackboard.GetPerfectShotPosition(), powerAmount);
-            CurrentBall.OnBallThrown(throwOutcome);
+            ThrowBall(CurrentBall, BasketBackboard.GetPerfectShotPosition(), powerAmount);
         }
 
-        [ContextMenu("Temp")]
-        private void Temp()
+        protected override void OnThrowReset()
         {
-            _throwerComponent.UpdatePerfectPower(BasketBackboard.GetPerfectShotPosition(), ballSocket.position);
+            if (LastThrowOutcome is ThrowOutcome.Perfect or ThrowOutcome.BackboardMake or ThrowOutcome.NearRim
+                or ThrowOutcome.FarRim)
+            {
+                Transform newShootingPosition = ShootingPositionsHandler.GetRandomShootingPosition();
+                transform.position = newShootingPosition.position;
+                transform.rotation = newShootingPosition.rotation;
+            }
+            ResetCameraPosition();
+            CurrentBall.DisablePhysics();
+            CurrentBall.transform.position = ballSocket.position;
+            ThrowerComponent.UpdatePerfectPower(BasketBackboard.GetPerfectShotPosition(), ballSocket.position);
+            OnThrowResetEvent?.Invoke();
         }
         
-        
+        private void ResetCameraPosition()
+        {
+            if (!CoreUtility.TryGetPlayerController(out PlayerController playerController)) return;
+            playerController.SetNewCameraViewpoint(cameraHolder, false);
+        }
     }
 }
