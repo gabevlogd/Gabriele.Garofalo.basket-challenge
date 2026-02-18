@@ -34,14 +34,20 @@ namespace BasketChallenge.Gameplay
             CurrentBall.DisablePhysics();
             CurrentBall.transform.position = ballSocket.position;
         }
-        
-        protected virtual void OnThrowReset(){}
 
-        protected ThrowOutcome ThrowBall(BasketBall ball, Vector3 targetPosition, float powerAmount)
+        protected virtual void OnThrowReset()
         {
-            ball.EnablePhysics();
-            LastThrowOutcome = ThrowerComponent.Throw(ball.Rigidbody, targetPosition, powerAmount);
-            ball.OnBallThrown(LastThrowOutcome);
+            CurrentBall.DisablePhysics();
+            CurrentBall.transform.position = ballSocket.position;
+            CurrentBall.transform.parent = ballSocket.transform;
+        }
+
+        protected ThrowOutcome ThrowBall(Vector3 targetPosition, float powerAmount)
+        {
+            CurrentBall.EnablePhysics();
+            CurrentBall.transform.parent = null;
+            LastThrowOutcome = ThrowerComponent.Throw(CurrentBall.Rigidbody, targetPosition, powerAmount);
+            CurrentBall.OnBallThrown(LastThrowOutcome);
             StartCoroutine(ResetThrowAfterDelay());
             return LastThrowOutcome;
         }

@@ -46,21 +46,30 @@ namespace BasketChallenge.Gameplay
                 Debug.LogWarning("No ball to throw.");
                 return;
             }
-            ThrowBall(CurrentBall, ThrowPositionsHandler.GetPerfectThrowPosition(), powerAmount);
+            ThrowBall(ThrowPositionsHandler.GetPerfectThrowPosition(), powerAmount);
             DisableSwipeThrowAbility();
         }
 
         protected override void OnThrowReset()
         {
-            Transform newShootingPosition = ShootingPositionsHandler.GetRandomShootingPosition();
-            transform.position = newShootingPosition.position;
-            transform.rotation = newShootingPosition.rotation;
+            base.OnThrowReset();
+            
+            if (LastThrowOutcome is ThrowOutcome.BackboardMake or ThrowOutcome.FarRim or ThrowOutcome.NearRim or ThrowOutcome.Perfect)
+            {
+                SetNewShootingPosition();
+            }
+            
             ResetCameraPosition();
-            CurrentBall.DisablePhysics();
-            CurrentBall.transform.position = ballSocket.position;
             ThrowerComponent.UpdatePerfectPower(ThrowPositionsHandler.GetPerfectThrowPosition(), ballSocket.position);
             EnableSwipeThrowAbility();
             OnThrowResetEvent?.Invoke();
+        }
+
+        private void SetNewShootingPosition()
+        {
+            Transform newShootingPosition = ShootingPositionsHandler.GetRandomShootingPosition();
+            transform.position = newShootingPosition.position;
+            transform.rotation = newShootingPosition.rotation;
         }
         
         private void ResetCameraPosition()
