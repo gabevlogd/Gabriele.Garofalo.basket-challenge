@@ -6,7 +6,7 @@ namespace BasketChallenge.Gameplay
 {
     public class ScoreDetector : MonoBehaviour
     {
-        public static event Action<Character, ThrowOutcome> OnScoreDetected;
+        public static event Action<ShootingCharacter, ThrowOutcome> OnScoreDetected;
         
         private Collider _ballChecker;
 

@@ -6,9 +6,9 @@ namespace BasketChallenge.Gameplay
 {
     public class ScoreReceiver : MonoBehaviour
     {
-        public static event Action<Character, int> OnScoreUpdated;
+        public static event Action<ShootingCharacter, int> OnScoreUpdated;
         
-        private Character _currentScoreOwner;
+        private ShootingCharacter _currentScoreOwner;
         
         public int CurrentScore { get; private set; }
 
@@ -16,7 +16,7 @@ namespace BasketChallenge.Gameplay
         {
             if (!TryGetComponent(out _currentScoreOwner))
             {
-                Debug.LogError("ScoreReceiver requires a Character component to function properly.");
+                Debug.LogError("ScoreReceiver requires a ShootingCharacter component to function properly.");
             }
         }
 
@@ -30,12 +30,14 @@ namespace BasketChallenge.Gameplay
             ScoreDetector.OnScoreDetected -= ScoreReceived;
         }
 
-        private void ScoreReceived(Character scoreOwner, ThrowOutcome scoreOutcome)
+        private void ScoreReceived(ShootingCharacter scoreOwner, ThrowOutcome scoreOutcome)
         {
             Debug.Log("Score received: " + scoreOutcome);
             if (scoreOwner != _currentScoreOwner) return;
             
             int scoreAmount = GetScoreAmountForOutcome(scoreOutcome);
+            
+            scoreAmount += GetBonusScoreAmount(scoreOwner.CurrentBall);
             
             CurrentScore += scoreAmount;
             
@@ -52,6 +54,23 @@ namespace BasketChallenge.Gameplay
                 ThrowOutcome.BackboardMake => 2,
                 _ => 0
             };
+        }
+
+        private int GetBonusScoreAmount(BasketBall ball)
+        {
+            int bonusScore = 0;
+            
+            if (ball.lastBackboardBonus != null)
+            {
+                bonusScore += ball.lastBackboardBonus.extraPoints;
+            }
+            
+            if (ball.OnFire)
+            {
+                bonusScore *= 2; 
+            }
+
+            return bonusScore;
         }
     }
 }

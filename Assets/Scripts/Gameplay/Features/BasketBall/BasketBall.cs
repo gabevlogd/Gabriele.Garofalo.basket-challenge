@@ -9,15 +9,19 @@ namespace BasketChallenge.Gameplay
     {
         public event Action<Collision> OnBallCollisionEnter;
         
-        public Character BallOwner { get; set; }
+        public ShootingCharacter BallOwner { get; set; }
         
         public Rigidbody Rigidbody => _rigidbody;
         private Rigidbody _rigidbody;
 
         public ThrowOutcome LastThrowOutcome { get; private set; }
 
+        public BackboardBonus lastBackboardBonus;
+
         [HideInInspector]
         public bool hasScored;
+        
+        public bool OnFire { get; private set; } = false;
         
         private int _collisionCount;
         
@@ -40,6 +44,7 @@ namespace BasketChallenge.Gameplay
             LastThrowOutcome = throwOutcome;
             _collisionCount = 0;
             hasScored = false;
+            lastBackboardBonus = null;
         }
         
         private void HandleFirstCollision(Collision collision)

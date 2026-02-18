@@ -8,15 +8,10 @@ namespace BasketChallenge.Gameplay
     public class PlayerCharacter : ShootingCharacter
     {
         [SerializeField]
-        private Transform ballSocket;
-        
-        [SerializeField]
         private Transform cameraHolder;
         
         private SwipeThrowController _swipeThrowController;
-
-        public BasketBall CurrentBall { get; private set; }
-
+        
         public static event Action OnThrowResetEvent;
         
         protected override void Awake()
@@ -27,12 +22,6 @@ namespace BasketChallenge.Gameplay
             {
                 Debug.LogError("PlayerCharacter requires a SwipeThrowController component to function properly.");
             }
-            
-            // TODO: handle ball spawning properly, this is just a temporary solution to get things working
-            CurrentBall = FindObjectOfType<BasketBall>();
-            CurrentBall.BallOwner = this;
-            CurrentBall.DisablePhysics();
-            CurrentBall.transform.position = ballSocket.position;
         }
 
         private void Start()

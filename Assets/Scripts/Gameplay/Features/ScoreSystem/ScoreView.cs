@@ -12,7 +12,7 @@ namespace BasketChallenge.Gameplay
         [SerializeField]
         private TextMeshProUGUI opponentScoreText;
 
-        private Character _playerCharacterRef;
+        private PlayerCharacter _playerCharacterRef;
 
         private void Start()
         {
@@ -34,7 +34,7 @@ namespace BasketChallenge.Gameplay
             ScoreReceiver.OnScoreUpdated -= UpdateScoreDisplay;
         }
         
-        private void UpdateScoreDisplay(Character scoreOwner, int score)
+        private void UpdateScoreDisplay(ShootingCharacter scoreOwner, int score)
         {
             SetScoreText(scoreOwner == _playerCharacterRef ? personalScoreText : opponentScoreText, score);
         }

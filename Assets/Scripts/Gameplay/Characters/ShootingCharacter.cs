@@ -11,6 +11,11 @@ namespace BasketChallenge.Gameplay
         protected ThrowerComponent ThrowerComponent;
         
         [SerializeField]
+        protected Transform ballSocket;
+        
+        public BasketBall CurrentBall { get; protected set; }
+        
+        [SerializeField]
         private float resetDelayAfterThrow = 2.5f;
         
         protected ThrowOutcome LastThrowOutcome;
@@ -22,6 +27,12 @@ namespace BasketChallenge.Gameplay
             {
                 Debug.LogError("ShootingCharacter requires a ThrowerComponent to function properly.");
             }
+            
+            // TODO: handle ball spawning properly, this is just a temporary solution to get things working
+            CurrentBall = FindObjectOfType<BasketBall>();
+            CurrentBall.BallOwner = this;
+            CurrentBall.DisablePhysics();
+            CurrentBall.transform.position = ballSocket.position;
         }
         
         protected virtual void OnThrowReset(){}
