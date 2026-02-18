@@ -9,8 +9,10 @@ namespace BasketChallenge.Gameplay
         private GameObject _ballViewpoint;
         
         private float _defaultCameraLagSpeed;
+        [SerializeField] private float followBallSpeed;
+        [SerializeField] private float blendOutFollowSpeed;
         
-        private bool _stopFollowBall;
+        private bool _blendOutFollowBall;
         private bool _followBall;
 
         private Vector3 _basketPosition;
@@ -18,37 +20,44 @@ namespace BasketChallenge.Gameplay
         private void Start()
         {
             _ballViewpoint = new GameObject("BallViewpoint");
-            _basketPosition = BasketBackboard.GetPerfectShotPosition() + Vector3.up * 3f;
+            _basketPosition = ThrowPositionsHandler.GetPerfectThrowPosition() + Vector3.up * 3f;
             _defaultCameraLagSpeed = cameraLagSpeed;
         }
 
         private void OnEnable()
         {
             SwipeThrowController.OnThrowCompleted += CameraStartFollowBall;
+            PlayerCharacter.OnThrowResetEvent += StopCameraFollowBall;
         }
 
         private void OnDisable()
         {
             SwipeThrowController.OnThrowCompleted -= CameraStartFollowBall;
+            PlayerCharacter.OnThrowResetEvent -= StopCameraFollowBall;
         }
 
         private void Update()
         {
             if (_followBall)
             {
-                _ballViewpoint.transform.position = Vector3.Lerp(_ballViewpoint.transform.position, _basketPosition, Time.deltaTime * 3f);
+                _ballViewpoint.transform.position = Vector3.Lerp(_ballViewpoint.transform.position, _basketPosition, Time.deltaTime * followBallSpeed);
             }
             
-            if (_stopFollowBall)
+            if (_blendOutFollowBall)
             {
-                cameraLagSpeed = Mathf.Lerp(cameraLagSpeed, 0, Time.deltaTime * 2f);
-                if (cameraLagSpeed <= 0.08f)
-                {
-                    cameraLagSpeed = _defaultCameraLagSpeed;
-                    _stopFollowBall = false;
-                    SetNewCameraViewpoint(PlayerCamera.transform);
-                }
+                cameraLagSpeed = Mathf.Lerp(cameraLagSpeed, 0, Time.deltaTime * blendOutFollowSpeed);
             }
+        }
+
+        public override void SetConfig(PlayerCameraManagerClass config)
+        {
+            base.SetConfig(config);
+            if (config is GameplayCameraManagerClass gameplayConfig)
+            {
+                followBallSpeed = gameplayConfig.followBallSpeed;
+                blendOutFollowSpeed = gameplayConfig.blendOutFollowSpeed;
+            }
+            
         }
 
         private void CameraStartFollowBall(float powerAmount)
@@ -61,14 +70,20 @@ namespace BasketChallenge.Gameplay
             
             SetNewCameraViewpoint(_ballViewpoint.transform);
             
-            playerCharacter.CurrentBall.OnBallCollisionEnter -= CameraStopFollowBall;
-            playerCharacter.CurrentBall.OnBallCollisionEnter += CameraStopFollowBall;
+            playerCharacter.CurrentBall.OnBallCollisionEnter -= BlendOutCameraFollowBall;
+            playerCharacter.CurrentBall.OnBallCollisionEnter += BlendOutCameraFollowBall;
         }
 
-        private void CameraStopFollowBall(Collision collision)
+        private void BlendOutCameraFollowBall(Collision collision)
         {
             _followBall = false;
-            _stopFollowBall = true;
+            _blendOutFollowBall = true;
+        }
+
+        private void StopCameraFollowBall()
+        {
+            _blendOutFollowBall = false;
+            cameraLagSpeed = _defaultCameraLagSpeed;
         }
     }
 }

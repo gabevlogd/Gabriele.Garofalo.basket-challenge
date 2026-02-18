@@ -71,7 +71,7 @@ namespace BasketChallenge.Gameplay
         private void ApplyVelocityCorrectionToScore()
         {
             float speed = Rigidbody.velocity.magnitude;
-            Vector3 correction = BasketBackboard.GetPerfectShotPosition() - transform.position;
+            Vector3 correction = ThrowPositionsHandler.GetPerfectThrowPosition() - transform.position;
             Rigidbody.velocity = correction * speed;
         }
 

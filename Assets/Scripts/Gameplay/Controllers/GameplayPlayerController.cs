@@ -22,9 +22,6 @@ namespace BasketChallenge.Gameplay
             MouseManager.OnMouseLeftDownEvent += ThrowInputBegan;
             MouseManager.OnMouseMovedEvent += ThrowInputMoved;
             MouseManager.OnMouseLeftUpEvent += ThrowInputEnded;
-            
-            SwipeThrowController.OnThrowCompleted += DisableThrowInput;
-            PlayerCharacter.OnThrowResetEvent += EnableThrowInput;
         }
         
         private void OnDisable()
@@ -39,9 +36,6 @@ namespace BasketChallenge.Gameplay
             MouseManager.OnMouseLeftDownEvent -= ThrowInputBegan;
             MouseManager.OnMouseMovedEvent -= ThrowInputMoved;
             MouseManager.OnMouseLeftUpEvent -= ThrowInputEnded;
-            
-            SwipeThrowController.OnThrowCompleted -= DisableThrowInput;
-            PlayerCharacter.OnThrowResetEvent -= EnableThrowInput;
         }
         
         private void ThrowInputBegan() => OnThrowInputBeganEvent?.Invoke();
@@ -55,11 +49,6 @@ namespace BasketChallenge.Gameplay
                 return TouchManager.AnyTouch() ? Input.GetTouch(0).position : Vector3.zero;
             }
             return Input.mousePosition;
-        }
-
-        private void DisableThrowInput(float f)
-        {
-            DisableThrowInput();
         }
 
         private void DisableThrowInput()

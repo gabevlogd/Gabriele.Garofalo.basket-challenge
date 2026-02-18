@@ -89,7 +89,7 @@ namespace BasketChallenge.Gameplay
                     adjustment = GetBackboardMakeAdjustment(startPosition, targetPosition);
                     break;
                 case ThrowOutcome.BackboardMiss:
-                    adjustment = GetBackboardMissAdjustment(targetPosition);
+                    adjustment = GetBackboardMissAdjustment(startPosition, targetPosition);
                     break;
                 case ThrowOutcome.ShortMiss:
                     adjustment = GetMissAdjustment(startPosition, targetPosition, powerAmount, perfectPowerAmount, true);
@@ -121,7 +121,7 @@ namespace BasketChallenge.Gameplay
         
         private Vector3 GetBackboardMakeAdjustment(Vector3 startPosition, Vector3 targetPosition)
         {
-            Transform backboardPosition = BasketBackboard.GetNearestBackboardThrowPosition(startPosition);
+            Transform backboardPosition = ThrowPositionsHandler.GetNearestBackboardThrowPosition(startPosition);
             if (backboardPosition == null)
             {
                 Debug.LogWarning("No backboard throw positions available. Cannot calculate backboard make adjustment.");
@@ -131,9 +131,9 @@ namespace BasketChallenge.Gameplay
             return backboardPosition.position - targetPosition;
         }
         
-        private Vector3 GetBackboardMissAdjustment(Vector3 targetPosition)
+        private Vector3 GetBackboardMissAdjustment(Vector3 startPosition, Vector3 targetPosition)
         {
-            Transform backboardPosition = BasketBackboard.GetRandomBackboardThrowPosition();
+            Transform backboardPosition = ThrowPositionsHandler.GetFartherBackboardThrowPosition(startPosition);
             if (backboardPosition == null)
             {
                 Debug.LogWarning("No backboard throw positions available. Cannot calculate backboard miss adjustment.");

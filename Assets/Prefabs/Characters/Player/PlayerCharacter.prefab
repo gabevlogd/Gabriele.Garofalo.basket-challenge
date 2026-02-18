@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 383442356584054179}
   - component: {fileID: 9065262867683742806}
   - component: {fileID: 315206558273453083}
+  - component: {fileID: 5335295569012115560}
   m_Layer: 6
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -128,6 +129,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: febd5c9fd58d4fa9baf547e914ebb9c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5335295569012115560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940724034781632740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c319c532598f41ccb1ea39b3e1e519a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minPowerAmountToThrow: 0.1
+  maxSwipeVerticalDistance: 1000
+  maxThrowDuration: 1
 --- !u!1 &2855458977571244967
 GameObject:
   m_ObjectHideFlags: 0

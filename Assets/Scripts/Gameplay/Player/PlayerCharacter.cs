@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BasketChallenge.Gameplay
 {
-    [RequireComponent(typeof(ThrowerComponent), typeof(ScoreReceiver))]
+    [RequireComponent(typeof(ScoreReceiver), typeof(SwipeThrowController))]
     public class PlayerCharacter : ShootingCharacter
     {
         [SerializeField]
@@ -12,6 +12,8 @@ namespace BasketChallenge.Gameplay
         
         [SerializeField]
         private Transform cameraHolder;
+        
+        private SwipeThrowController _swipeThrowController;
 
         public BasketBall CurrentBall { get; private set; }
 
@@ -20,6 +22,11 @@ namespace BasketChallenge.Gameplay
         protected override void Awake()
         {
             base.Awake();
+            
+            if (!TryGetComponent(out _swipeThrowController))
+            {
+                Debug.LogError("PlayerCharacter requires a SwipeThrowController component to function properly.");
+            }
             
             // TODO: handle ball spawning properly, this is just a temporary solution to get things working
             CurrentBall = FindObjectOfType<BasketBall>();
@@ -30,7 +37,7 @@ namespace BasketChallenge.Gameplay
 
         private void Start()
         {
-            ThrowerComponent.UpdatePerfectPower(BasketBackboard.GetPerfectShotPosition(), ballSocket.position);
+            ThrowerComponent.UpdatePerfectPower(ThrowPositionsHandler.GetPerfectThrowPosition(), ballSocket.position);
         }
 
         private void OnEnable()
@@ -50,22 +57,20 @@ namespace BasketChallenge.Gameplay
                 Debug.LogWarning("No ball to throw.");
                 return;
             }
-            ThrowBall(CurrentBall, BasketBackboard.GetPerfectShotPosition(), powerAmount);
+            ThrowBall(CurrentBall, ThrowPositionsHandler.GetPerfectThrowPosition(), powerAmount);
+            DisableSwipeThrowAbility();
         }
 
         protected override void OnThrowReset()
         {
-            if (LastThrowOutcome is ThrowOutcome.Perfect or ThrowOutcome.BackboardMake or ThrowOutcome.NearRim
-                or ThrowOutcome.FarRim)
-            {
-                Transform newShootingPosition = ShootingPositionsHandler.GetRandomShootingPosition();
-                transform.position = newShootingPosition.position;
-                transform.rotation = newShootingPosition.rotation;
-            }
+            Transform newShootingPosition = ShootingPositionsHandler.GetRandomShootingPosition();
+            transform.position = newShootingPosition.position;
+            transform.rotation = newShootingPosition.rotation;
             ResetCameraPosition();
             CurrentBall.DisablePhysics();
             CurrentBall.transform.position = ballSocket.position;
-            ThrowerComponent.UpdatePerfectPower(BasketBackboard.GetPerfectShotPosition(), ballSocket.position);
+            ThrowerComponent.UpdatePerfectPower(ThrowPositionsHandler.GetPerfectThrowPosition(), ballSocket.position);
+            EnableSwipeThrowAbility();
             OnThrowResetEvent?.Invoke();
         }
         
@@ -73,6 +78,16 @@ namespace BasketChallenge.Gameplay
         {
             if (!CoreUtility.TryGetPlayerController(out PlayerController playerController)) return;
             playerController.SetNewCameraViewpoint(cameraHolder, false);
+        }
+        
+        private void EnableSwipeThrowAbility()
+        {
+            _swipeThrowController.enabled = true;
+        }
+
+        private void DisableSwipeThrowAbility()
+        {
+            _swipeThrowController.enabled = false;
         }
     }
 }

@@ -19,3 +19,5 @@ MonoBehaviour:
   enableCameraRotationLag: 0
   cameraLagSpeed: 0.5
   cameraRotationLagSpeed: 1
+  followBallSpeed: 2
+  blendOutFollowSpeed: 1
