@@ -21,11 +21,6 @@ namespace BasketChallenge.Core
             }
         }
 
-        protected virtual void Start()
-        {
-            InitCameraManager();
-        }
-
         public override void SetConfig(ControllerClass config)
         {
             base.SetConfig(config);
@@ -40,7 +35,7 @@ namespace BasketChallenge.Core
         protected void EnableMouseEvents() => _inputComponent?.EnableMouseEvents();
         protected void DisableMouseEvents() => _inputComponent?.DisableMouseEvents();
 
-        protected virtual void InitCameraManager()
+        public virtual void InitCameraManager()
         {
             if (!playerCameraManager)
             {

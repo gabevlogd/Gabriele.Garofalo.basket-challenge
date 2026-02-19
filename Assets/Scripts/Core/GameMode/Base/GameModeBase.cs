@@ -22,6 +22,7 @@ namespace BasketChallenge.Core
             if (!CreatePlayerController(gameModeClass.playerControllerClass)) return false;
             SpawnPlayerControlledGameObject(gameModeClass.playerControllableClass);
             PlayerController.Possess(PlayerControllableObject);
+            PlayerController.InitCameraManager();
             if (!CreateHUD(gameModeClass.hudClass)) return false;
             return true;
         }
