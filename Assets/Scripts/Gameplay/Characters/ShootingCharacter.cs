@@ -5,20 +5,24 @@ using UnityEngine;
 
 namespace BasketChallenge.Gameplay
 {
-    [RequireComponent(typeof(ThrowerComponent))]
-    public class ShootingCharacter : Character
+    [RequireComponent(typeof(ThrowerComponent), typeof(ScoreReceiver))]
+    public class ShootingCharacter : Character, IMatchParticipant
     {
+        public BasketBall CurrentBall { get; protected set; }
+        
         protected ThrowerComponent ThrowerComponent;
+        
+        protected ThrowOutcome LastThrowOutcome;
         
         [SerializeField]
         protected Transform ballSocket;
         
-        public BasketBall CurrentBall { get; protected set; }
-        
         [SerializeField]
         private float resetDelayAfterThrow = 2.5f;
         
-        protected ThrowOutcome LastThrowOutcome;
+        private Coroutine _resetThrowCoroutine;
+        
+        private readonly Guid _id = Guid.NewGuid();
 
         protected override void Awake()
         {
@@ -35,6 +39,26 @@ namespace BasketChallenge.Gameplay
             CurrentBall.transform.position = ballSocket.position;
         }
 
+        protected virtual void OnEnable()
+        {
+            MatchManager.OnMatchEnd += ClearResetThrowCoroutine;
+            
+            if (CoreUtility.TryGetGameMode(out GameplayGameMode gameplayGameMode))
+            {
+                gameplayGameMode.MatchResultManager.RegisterParticipant(this);
+            }
+        }
+
+        protected virtual void OnDisable()
+        {
+            MatchManager.OnMatchEnd -= ClearResetThrowCoroutine;
+            
+            if (CoreUtility.TryGetGameMode(out GameplayGameMode gameplayGameMode))
+            {
+                gameplayGameMode.MatchResultManager.UnregisterParticipant(this);
+            }
+        }
+
         protected virtual void OnThrowReset()
         {
             CurrentBall.DisablePhysics();
@@ -48,7 +72,7 @@ namespace BasketChallenge.Gameplay
             CurrentBall.transform.parent = null;
             LastThrowOutcome = ThrowerComponent.Throw(CurrentBall.Rigidbody, targetPosition, powerAmount);
             CurrentBall.OnBallThrown(LastThrowOutcome);
-            StartCoroutine(ResetThrowAfterDelay());
+            _resetThrowCoroutine = StartCoroutine(ResetThrowAfterDelay());
             return LastThrowOutcome;
         }
 
@@ -56,6 +80,30 @@ namespace BasketChallenge.Gameplay
         {
             yield return new WaitForSeconds(resetDelayAfterThrow);
             OnThrowReset();
+        }
+
+        private void ClearResetThrowCoroutine()
+        {
+            if (_resetThrowCoroutine != null)
+            {
+                StopCoroutine(_resetThrowCoroutine);
+                _resetThrowCoroutine = null;
+            }
+        }
+
+        public Guid GetParticipantId()
+        {
+            return _id;
+        }
+
+        public string GetParticipantName()
+        {
+            return gameObject.name;
+        }
+
+        public int GetParticipantScore()
+        {
+            return TryGetComponent(out ScoreReceiver scoreReceiver) ? scoreReceiver.CurrentScore : 0;
         }
     }
 }

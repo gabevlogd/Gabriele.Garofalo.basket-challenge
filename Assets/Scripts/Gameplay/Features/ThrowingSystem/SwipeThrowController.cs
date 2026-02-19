@@ -114,6 +114,7 @@ namespace BasketChallenge.Gameplay
         
         private void ThrowCompleted(float powerAmount)
         {
+            if (!enabled) return;
             OnThrowCompleted?.Invoke(powerAmount);
             ResetThrow();
         }

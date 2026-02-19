@@ -1,7 +1,7 @@
 {
     "name": "BasketChallenge.Core",
     "rootNamespace": "BasketChallenge.Core",
-    "references": [],
+    "references": ["GUID:43838f78380f2ba4dbf2408e472e1836"],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

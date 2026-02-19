@@ -36,12 +36,12 @@ namespace BasketChallenge.Gameplay
 
         private void OnBackToMenuClicked()
         {
-            SceneManager.LoadScene("Menu");
+            SceneManager.LoadScene(0);
         }
 
         private void OnPlayAgainClicked()
         {
-            SceneManager.LoadScene("Gameplay");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
         }
     }
 }

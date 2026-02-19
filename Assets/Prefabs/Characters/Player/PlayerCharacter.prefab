@@ -97,8 +97,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skinnedMeshComponent: {fileID: 0}
-  resetDelayAfterThrow: 3.5
   ballSocket: {fileID: 9601968248859927}
+  resetDelayAfterThrow: 3.5
   cameraHolder: {fileID: 958492887486739408}
 --- !u!114 &9065262867683742806
 MonoBehaviour:
@@ -141,9 +141,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c319c532598f41ccb1ea39b3e1e519a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minPowerAmountToThrow: 0.1
+  minPowerAmountToThrow: 0.05
   maxSwipeVerticalDistance: 1000
-  maxThrowDuration: 1
+  maxThrowDuration: 0.2
 --- !u!1 &2855458977571244967
 GameObject:
   m_ObjectHideFlags: 0

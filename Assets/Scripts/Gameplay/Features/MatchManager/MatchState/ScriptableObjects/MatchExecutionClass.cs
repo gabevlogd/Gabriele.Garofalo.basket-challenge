@@ -1,7 +1,7 @@
 using BasketChallenge.Core;
 using UnityEngine;
 
-namespace BasketChallenge.Gameplay.ScriptableObjects
+namespace BasketChallenge.Gameplay
 {
     [CreateAssetMenu(fileName = "MatchExecution", menuName = "States/MatchStates/MatchExecution", order = 0)]
     public class MatchExecutionClass : StateClass

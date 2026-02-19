@@ -34,10 +34,15 @@ namespace BasketChallenge.Gameplay
         {
             Debug.Log("Score received: " + scoreOutcome);
             if (scoreOwner != _currentScoreOwner) return;
+
+            // first check if there are any bonus points to add
+            int scoreAmount = GetBonusScoreAmount(scoreOwner.CurrentBall);
             
-            int scoreAmount = GetScoreAmountForOutcome(scoreOutcome);
+            // if not then add the regular points based on the outcome
+            scoreAmount = scoreAmount == 0 ? GetScoreAmountForOutcome(scoreOutcome) : scoreAmount;
             
-            scoreAmount += GetBonusScoreAmount(scoreOwner.CurrentBall);
+            // apply on fire multiplier if applicable
+            scoreAmount *= scoreOwner.CurrentBall.OnFire ? 2 : 1;
             
             CurrentScore += scoreAmount;
             

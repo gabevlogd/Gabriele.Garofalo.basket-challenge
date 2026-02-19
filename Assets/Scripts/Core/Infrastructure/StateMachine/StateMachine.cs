@@ -15,6 +15,8 @@ namespace BasketChallenge.Core
         private StateBase _currentState;
         
         private StateBase _previousState;
+        
+        private bool _started;
 
         private void Awake()
         {
@@ -23,7 +25,20 @@ namespace BasketChallenge.Core
 
         private void Update()
         {
+            if (!_started) return;
             _currentState?.Update();
+        }
+        
+        public void StartStateMachine()
+        {
+            if (_started)
+            {
+                Debug.LogWarning("StateMachine StartStateMachine: already started.");
+                return;
+            }
+            
+            _started = true;
+            _currentState?.Enter();
         }
         
         public string GetCurrentStateName()
@@ -63,11 +78,40 @@ namespace BasketChallenge.Core
             ChangeState(newState);
         }
 
+        public void ChangeState<T>() where T : StateBase
+        {
+            if (_states == null)
+            {
+                Debug.LogError("StateMachine ChangeState failed: states dictionary is null.");
+                return;
+            }
+            
+            if (!_states.TryGetValue(typeof(T).Name, out StateBase newState))
+            {
+                Debug.LogError($"StateMachine ChangeState failed: state of type '{typeof(T).Name}' not found.");
+                return;
+            }
+            
+            ChangeState(newState);
+        }
+
         public void ChangeState(StateBase newState)
         {
+            if (!_started)
+            {
+                Debug.LogWarning("StateMachine ChangeState: state machine not started yet. Call StartStateMachine() first.");
+                return;
+            }
+            
             if (newState == null)
             {
                 Debug.LogError("StateMachine ChangeState failed: newState is null.");
+                return;
+            }
+            
+            if (_currentState == newState)
+            {
+                Debug.LogWarning($"StateMachine ChangeState: already in state '{newState.StateName}'.");
                 return;
             }
             
@@ -92,8 +136,6 @@ namespace BasketChallenge.Core
             {
                 AddNewState(stateClass);
             }
-            
-            _currentState?.Enter();
         }
         
         private StateBase AddNewState(StateClass newStateClass)
@@ -115,6 +157,13 @@ namespace BasketChallenge.Core
                 Debug.LogError($"StateMachine AddNewState failed: CreateState returned null for {newStateClass.name}.");
                 return null;
             }
+            
+            if (_states.ContainsKey(newState.StateName))
+            {
+                Debug.LogError($"StateMachine AddNewState failed: state with name '{newState.StateName}' already exists.");
+                return null;
+            }
+            
             newState.Init(gameObject, this);
             _states.Add(newState.StateName, newState);
             return newState;

@@ -23,7 +23,7 @@ namespace BasketChallenge.Gameplay
 
         private void OnPlayButtonClicked()
         {
-            SceneManager.LoadScene("Gameplay");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
 }

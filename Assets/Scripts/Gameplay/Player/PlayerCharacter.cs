@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BasketChallenge.Gameplay
 {
-    [RequireComponent(typeof(ScoreReceiver), typeof(SwipeThrowController))]
+    [RequireComponent(typeof(SwipeThrowController))]
     public class PlayerCharacter : ShootingCharacter
     {
         [SerializeField]
@@ -26,17 +26,23 @@ namespace BasketChallenge.Gameplay
 
         private void Start()
         {
-            ThrowerComponent.UpdatePerfectPower(ThrowPositionsHandler.GetPerfectThrowPosition(), ballSocket.position);
+            DisableSwipeThrowAbility();
         }
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             SwipeThrowController.OnThrowCompleted += ThrowBall;
+            MatchManager.OnMatchStart += HandleMatchStart;
+            MatchManager.OnMatchEnd += DisableSwipeThrowAbility;
         }
         
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             SwipeThrowController.OnThrowCompleted -= ThrowBall;
+            MatchManager.OnMatchStart -= HandleMatchStart;
+            MatchManager.OnMatchEnd -= DisableSwipeThrowAbility;
         }
         
         private void ThrowBall(float powerAmount)
@@ -86,6 +92,16 @@ namespace BasketChallenge.Gameplay
         private void DisableSwipeThrowAbility()
         {
             _swipeThrowController.enabled = false;
+        }
+        
+        private void HandleMatchStart()
+        {
+            EnableSwipeThrowAbility();
+            if (CoreUtility.TryGetHUD(out GameplayHUD gameplayHUD))
+            {
+                gameplayHUD.ShowHUD();
+            }
+            ThrowerComponent.UpdatePerfectPower(ThrowPositionsHandler.GetPerfectThrowPosition(), ballSocket.position);
         }
     }
 }
