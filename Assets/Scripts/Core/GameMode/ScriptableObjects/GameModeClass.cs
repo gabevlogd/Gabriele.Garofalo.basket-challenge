@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BasketChallenge.Core
 {
-    [CreateAssetMenu(fileName = "DefaultGameMode", menuName = "GameModes/DefaultGameMode", order = 0)]
+    [CreateAssetMenu(fileName = "DefaultGameMode", menuName = "ScriptableObjects/GameModes/DefaultGameMode", order = 0)]
     public class GameModeClass : ScriptableObject
     {
         [SerializeField]

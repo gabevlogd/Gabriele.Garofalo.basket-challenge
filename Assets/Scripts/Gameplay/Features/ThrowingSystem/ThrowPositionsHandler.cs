@@ -15,7 +15,7 @@ namespace BasketChallenge.Gameplay
         {
             if (Instance.perfectThrowPosition == null)
             {
-                Debug.LogWarning("No perfect shot position assigned in BackboardThrowHandler.");
+                Debug.LogWarning("No perfect throw position assigned in BackboardThrowHandler.");
                 return Vector3.zero;
             }
             return Instance.perfectThrowPosition.position;

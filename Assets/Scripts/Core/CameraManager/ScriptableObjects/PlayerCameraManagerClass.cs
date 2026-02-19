@@ -3,7 +3,7 @@ using UnityEngine.Serialization;
 
 namespace BasketChallenge.Core
 {
-    [CreateAssetMenu(fileName = "PlayerCameraManager", menuName = "CameraManagers/PlayerCameraManager", order = 0)]
+    [CreateAssetMenu(fileName = "PlayerCameraManager", menuName = "ScriptableObjects/CameraManagers/PlayerCameraManager", order = 0)]
     public class PlayerCameraManagerClass : ScriptableObject
     {
         public string cameraManagerName = "PlayerCameraManager";

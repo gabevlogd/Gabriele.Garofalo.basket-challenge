@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BasketChallenge.Gameplay
 {
-    [CreateAssetMenu(fileName = "MatchStart", menuName = "States/MatchStates/MatchStart", order = 0)]
+    [CreateAssetMenu(fileName = "MatchStart", menuName = "ScriptableObjects/States/MatchStates/MatchStart", order = 0)]
     public class MatchStartClass : StateClass
     {
         public override StateBase CreateState()

@@ -59,7 +59,6 @@ namespace BasketChallenge.Gameplay
             powerAmount = Mathf.Clamp(powerAmount, 0f, 1f);
             float perfectPowerAmount = GetPerfectPowerAmount(targetPosition, startPosition);
             _lastThrowOutcome  = powerProcessor.EvaluateThrowOutcome(powerAmount, perfectPowerAmount);
-            Debug.Log(_lastThrowOutcome);
             return targetPosition + CalculateAdjustment(_lastThrowOutcome, startPosition, targetPosition, powerAmount, perfectPowerAmount);
         }
         

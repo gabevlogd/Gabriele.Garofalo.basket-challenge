@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BasketChallenge.Core
 {
-    [CreateAssetMenu(fileName = "HUD", menuName = "HUDs/HUD", order = 0)]
+    [CreateAssetMenu(fileName = "HUD", menuName = "ScriptableObjects/HUDs/HUD", order = 0)]
     public class HUDClass : ScriptableObject
     {
         public string hudName = "HUD";

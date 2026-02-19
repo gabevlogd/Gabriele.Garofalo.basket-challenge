@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BasketChallenge.Gameplay
 {
-    [CreateAssetMenu(fileName = "MenuHUD", menuName = "HUDs/MenuHUD", order = 0)]
+    [CreateAssetMenu(fileName = "MenuHUD", menuName = "ScriptableObjects/HUDs/MenuHUD", order = 0)]
     public class MenuHUDClass : HUDClass
     {
         public override HUD CreateHUD()

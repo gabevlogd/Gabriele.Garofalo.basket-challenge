@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BasketChallenge.Core
 {
-    [CreateAssetMenu(fileName = "Controllable", menuName = "Controllables/Controllable", order = 0)]
+    [CreateAssetMenu(fileName = "Controllable", menuName = "ScriptableObjects/Controllables/Controllable", order = 0)]
     public class ControllableClass : ScriptableObject
     {
         public string controllableName = "Controllable";

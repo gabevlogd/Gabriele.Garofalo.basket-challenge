@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BasketChallenge.Gameplay
 {
-    [CreateAssetMenu(fileName = "GameplayPlayerController", menuName = "Controllers/GameplayPlayerController", order = 0)]
+    [CreateAssetMenu(fileName = "GameplayPlayerController", menuName = "ScriptableObjects/Controllers/GameplayPlayerController", order = 0)]
     public class GameplayPlayerControllerClass : PlayerControllerClass
     {
         public override Controller CreateController()

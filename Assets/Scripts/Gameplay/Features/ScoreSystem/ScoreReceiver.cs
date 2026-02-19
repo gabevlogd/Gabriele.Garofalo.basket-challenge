@@ -7,6 +7,7 @@ namespace BasketChallenge.Gameplay
     public class ScoreReceiver : MonoBehaviour
     {
         public static event Action<ShootingCharacter, int> OnScoreUpdated;
+        public static event Action<ShootingCharacter, int> OnScoreAmountCalculated;
         
         private ShootingCharacter _currentScoreOwner;
         
@@ -43,6 +44,8 @@ namespace BasketChallenge.Gameplay
             
             // apply on fire multiplier if applicable
             scoreAmount *= scoreOwner.CurrentBall.OnFire ? 2 : 1;
+            
+            OnScoreAmountCalculated?.Invoke(scoreOwner, scoreAmount);
             
             CurrentScore += scoreAmount;
             

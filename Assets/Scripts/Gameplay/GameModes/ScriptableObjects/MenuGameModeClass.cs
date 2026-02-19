@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BasketChallenge.Gameplay
 {
-    [CreateAssetMenu(fileName = "MenuGameMode", menuName = "GameModes/MenuGameMode", order = 0)]
+    [CreateAssetMenu(fileName = "MenuGameMode", menuName = "ScriptableObjects/GameModes/MenuGameMode", order = 0)]
     public class MenuGameModeClass : GameModeClass
     {
         public override GameModeBase CreateGameMode()
