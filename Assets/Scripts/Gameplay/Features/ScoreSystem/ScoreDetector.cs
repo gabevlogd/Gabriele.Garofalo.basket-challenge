@@ -29,9 +29,9 @@ namespace BasketChallenge.Gameplay
                 }
 
                 // Prevent multiple score detections for the same throw
-                if (ball.hasScored) return;
+                if (ball.HasScored) return;
                 
-                ball.hasScored = true;
+                ball.HasScored = true;
                 OnScoreDetected?.Invoke(ball.BallOwner, ball.LastThrowOutcome);
             }
         }

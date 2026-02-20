@@ -61,15 +61,16 @@ namespace BasketChallenge.Gameplay
 
         protected virtual void OnThrowReset()
         {
-            CurrentBall.DisablePhysics();
+            // CurrentBall.DisablePhysics();
+            CurrentBall.OnBallReset();
             CurrentBall.transform.position = ballSocket.position;
             CurrentBall.transform.parent = ballSocket.transform;
         }
 
         protected ThrowOutcome ThrowBall(Vector3 targetPosition, float powerAmount)
         {
-            CurrentBall.EnablePhysics();
-            CurrentBall.transform.parent = null;
+            // CurrentBall.EnablePhysics();
+            // CurrentBall.transform.parent = null;
             LastThrowOutcome = ThrowerComponent.Throw(CurrentBall.Rigidbody, targetPosition, powerAmount);
             CurrentBall.OnBallThrown(LastThrowOutcome);
             _resetThrowCoroutine = StartCoroutine(ResetThrowAfterDelay());

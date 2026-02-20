@@ -72,11 +72,6 @@ namespace BasketChallenge.Gameplay
             {
                 bonusScore += ball.lastBackboardBonus.extraPoints;
             }
-            
-            if (ball.OnFire)
-            {
-                bonusScore *= 2; 
-            }
 
             return bonusScore;
         }

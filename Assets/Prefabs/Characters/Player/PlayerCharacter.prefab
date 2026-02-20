@@ -143,7 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minPowerAmountToThrow: 0.05
   maxSwipeVerticalDistance: 1000
-  maxThrowDuration: 0.2
+  maxThrowDuration: 1
 --- !u!1 &2855458977571244967
 GameObject:
   m_ObjectHideFlags: 0
