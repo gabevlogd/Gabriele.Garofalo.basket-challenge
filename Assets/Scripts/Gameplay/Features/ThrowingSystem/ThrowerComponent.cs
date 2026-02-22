@@ -22,6 +22,7 @@ namespace BasketChallenge.Gameplay
         
         [SerializeField]
         private ThrowPowerProcessor powerProcessor = new ThrowPowerProcessor();
+        public ThrowPowerProcessor PowerProcessor => powerProcessor;
         
         private ThrowOutcome _lastThrowOutcome;
         
@@ -41,19 +42,36 @@ namespace BasketChallenge.Gameplay
                 return ThrowOutcome.None;
             }
             
+#if UNITY_EDITOR
             Debugger.DrawDebugSphere(targetPosition, 0.5f, Color.green, 5f);
+#endif
+            
             if (powerAmount >= 0f)
             {
                 targetPosition = GetAdjustedTargetPosition(powerAmount, objectToThrow.transform.position, targetPosition);
             }
+            else
+            {
+                // If no power amount is provided, we assume it's a perfect throw and set the last throw outcome accordingly.
+                _lastThrowOutcome = ThrowOutcome.Perfect;
+            }
 
             bool preferLowAngle = _lastThrowOutcome is ThrowOutcome.BackboardMake or ThrowOutcome.BackboardMiss;
             objectToThrow.velocity = GetThrowVelocity(targetPosition, objectToThrow.transform.position, preferLowAngle);
+            
+#if UNITY_EDITOR
             Debugger.DrawDebugSphere(targetPosition, 0.5f, Color.red, 5f);
+#endif
             
             return _lastThrowOutcome;
         }
         
+        /// <summary>
+        /// Returns an adjusted target position, where adjustment means move the target position from the
+        /// perfect throw position in a direction and magnitude that depends on the last throw outcome,
+        /// which is evaluated from the provided power amount and the perfect power amount for the given target position.
+        /// </summary>
+        /// <param name="startPosition"> The position from which the object is thrown, used to calculate the direction of the adjustment.</param>
         private Vector3 GetAdjustedTargetPosition(float powerAmount, Vector3 startPosition, Vector3 targetPosition)
         {
             powerAmount = Mathf.Clamp(powerAmount, 0f, 1f);
@@ -62,6 +80,13 @@ namespace BasketChallenge.Gameplay
             return targetPosition + CalculateAdjustment(_lastThrowOutcome, startPosition, targetPosition, powerAmount, perfectPowerAmount);
         }
         
+        /// <summary>
+        /// Calculates the perfect power amount based on the horizontal distance between the start position and the target position.
+        /// </summary>
+        /// <returns>
+        /// The power amount needed to perfectly reach the target position, normalized between 0 and 1 based
+        /// on the defined minimum and maximum horizontal distances.
+        /// </returns>
         private float GetPerfectPowerAmount(Vector3 targetPosition, Vector3 startPosition)
         {
             Vector3 horizontalDistance = Vector3.ProjectOnPlane(targetPosition - startPosition, Vector3.up);

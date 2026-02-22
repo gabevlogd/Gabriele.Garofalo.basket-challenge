@@ -24,8 +24,9 @@ namespace BasketChallenge.Gameplay
             }
         }
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             DisableSwipeThrowAbility();
         }
 
@@ -34,7 +35,7 @@ namespace BasketChallenge.Gameplay
             base.OnEnable();
             SwipeThrowController.OnThrowCompleted += ThrowBall;
             MatchManager.OnMatchStart += HandleMatchStart;
-            MatchManager.OnMatchEnd += DisableSwipeThrowAbility;
+            MatchManager.OnMatchTimeExpired += DisableSwipeThrowAbility;
         }
         
         protected override void OnDisable()
@@ -42,16 +43,11 @@ namespace BasketChallenge.Gameplay
             base.OnDisable();
             SwipeThrowController.OnThrowCompleted -= ThrowBall;
             MatchManager.OnMatchStart -= HandleMatchStart;
-            MatchManager.OnMatchEnd -= DisableSwipeThrowAbility;
+            MatchManager.OnMatchTimeExpired -= DisableSwipeThrowAbility;
         }
         
         private void ThrowBall(float powerAmount)
         {
-            if (!CurrentBall)
-            {
-                Debug.LogWarning("No ball to throw.");
-                return;
-            }
             ThrowBall(ThrowPositionsHandler.GetPerfectThrowPosition(), powerAmount);
             DisableSwipeThrowAbility();
         }

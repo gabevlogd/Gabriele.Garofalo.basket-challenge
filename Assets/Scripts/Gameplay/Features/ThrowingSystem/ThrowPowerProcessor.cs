@@ -41,6 +41,9 @@ namespace BasketChallenge.Gameplay
         LongMiss
     }
     
+    /// <summary>
+    /// This class processes the throw power input and calculates the outcome of the throw based on predefined ranges for perfect throws, rim hits, backboard hits, and misses.
+    /// </summary>
     [System.Serializable]
     public class ThrowPowerProcessor
     {
@@ -48,6 +51,12 @@ namespace BasketChallenge.Gameplay
         
         public ThrowPowerRangesRuntime CalculateRanges(float perfectPower)
         {
+            if (!rangesContainer)
+            {
+                Debug.LogError("ThrowPowerProcessor requires a reference to a PowerRangesContainer ScriptableObject.");
+                return new ThrowPowerRangesRuntime(0, 0, 0, 0, 0, 0);
+            }
+            
             perfectPower = Mathf.Clamp01(perfectPower);
             
             ThrowPowerRanges ranges = rangesContainer.ranges;

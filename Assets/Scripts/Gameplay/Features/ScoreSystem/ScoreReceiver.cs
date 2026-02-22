@@ -33,8 +33,8 @@ namespace BasketChallenge.Gameplay
 
         private void ScoreReceived(ShootingCharacter scoreOwner, ThrowOutcome scoreOutcome)
         {
-            Debug.Log("Score received: " + scoreOutcome);
             if (scoreOwner != _currentScoreOwner) return;
+            Debug.Log(scoreOwner.name + " received: " + scoreOutcome);
 
             // first check if there are any bonus points to add
             int scoreAmount = GetBonusScoreAmount(scoreOwner.CurrentBall);

@@ -12,12 +12,6 @@ namespace BasketChallenge.Core
             GameObject debuggerObject = new GameObject("Debugger");
             debuggerObject.AddComponent<Debugger>();
         }
-    
-        [ContextMenu("Load Reward Scene")]
-        private void LoadGameplay()
-        {
-            SceneManager.LoadScene("Reward");
-        }
 
         #region Draw Debug Methods
     

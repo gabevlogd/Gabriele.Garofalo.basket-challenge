@@ -18,14 +18,15 @@ namespace BasketChallenge.Gameplay
 
         private float _lastPowerAmount;
         
-        [SerializeField]
-        private float minPowerAmountToThrow = 0.1f;
+        [SerializeField] private float minPowerAmountToThrow = 0.1f;
         
-        [SerializeField]
-        private float maxSwipeVerticalDistance = 1000f;
+        [SerializeField] private float maxSwipeVerticalDistance = 1000f;
         
-        [SerializeField]
-        private float maxThrowDuration = 0.2f; 
+        [SerializeField] private float maxThrowDuration = 0.2f; 
+        
+        [SerializeField] private float deadzonePixels = 2f;
+        
+        [SerializeField] private float smoothTime = 0.06f; 
 
         private Coroutine _throwTimeoutCoroutine;
         
@@ -48,6 +49,10 @@ namespace BasketChallenge.Gameplay
             _startTouchPosition = GameplayPlayerController.GetPointerPosition();
             _lastPowerAmount = 0f;
             _lastTouchPosition = _startTouchPosition;
+            _targetPower = 0f;
+            _displayPower = 0f;
+            _maxPowerReached = 0f;
+            _powerVel = 0f;
             
             GameplayPlayerController.OnThrowInputMovedEvent -= ThrowInputMoved;
             GameplayPlayerController.OnThrowInputMovedEvent += ThrowInputMoved;
@@ -71,21 +76,35 @@ namespace BasketChallenge.Gameplay
             OnSwipeThrowStarted?.Invoke();
         }
         
+        private float _targetPower;     // 0..1 (raw/target)
+        private float _displayPower;    // 0..1 (smoothed)
+        private float _powerVel;        // SmoothDamp velocity
+        private float _maxPowerReached; // monotonic clamp
+
         private void UpdatePowerAmount()
         {
-            Vector2 currentTouchPosition = GameplayPlayerController.GetPointerPosition();
-            
-            // Prevent power amount from decreasing if the user swipes down
-            if (_lastTouchPosition.y > currentTouchPosition.y)
-            { 
-                return; 
-            }
-            
-            float swipeVerticalDistance = Mathf.Abs(currentTouchPosition.y - _startTouchPosition.y);
-            float currentPowerAmount = Mathf.Clamp01(swipeVerticalDistance / maxSwipeVerticalDistance);
-            OnThrowPowerUpdated?.Invoke(currentPowerAmount);
-            _lastTouchPosition = currentTouchPosition;
-            _lastPowerAmount = currentPowerAmount;
+            Vector2 p = GameplayPlayerController.GetPointerPosition();
+
+            // vertical distance from start touch position (in pixels)
+            float dy = p.y - _startTouchPosition.y;
+
+            // deadzone for avoiding noise when the user is just tapping or making very small movements
+            if (dy < deadzonePixels)
+                dy = 0f;
+
+            // normalize to 0..1 based on maxSwipeVerticalDistance, and clamp to 1
+            float raw = Mathf.Clamp01(dy / maxSwipeVerticalDistance);
+
+            // monotonic clamp to ensure the power only increases as the user swipes up, and doesn't drop if they move their finger down a bit while swiping
+            _maxPowerReached = Mathf.Max(_maxPowerReached, raw);
+            _targetPower = _maxPowerReached;
+
+            // smoothing towards the target power for better feel (frame-rate independent)
+            _displayPower = Mathf.SmoothDamp(_displayPower, _targetPower, ref _powerVel, smoothTime);
+
+            OnThrowPowerUpdated?.Invoke(_displayPower);
+            _lastTouchPosition = p;
+            _lastPowerAmount = _displayPower;
         }
 
         private void ThrowStartCheck()

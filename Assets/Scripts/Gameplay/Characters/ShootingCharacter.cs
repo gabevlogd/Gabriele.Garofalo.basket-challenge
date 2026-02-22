@@ -8,6 +8,9 @@ namespace BasketChallenge.Gameplay
     [RequireComponent(typeof(ThrowerComponent), typeof(ScoreReceiver))]
     public class ShootingCharacter : Character, IMatchParticipant
     {
+        [SerializeField]
+        private BasketBall ballPrefab; 
+        
         public BasketBall CurrentBall { get; protected set; }
         
         protected ThrowerComponent ThrowerComponent;
@@ -32,36 +35,39 @@ namespace BasketChallenge.Gameplay
                 Debug.LogError("ShootingCharacter requires a ThrowerComponent to function properly.");
             }
             
-            // TODO: handle ball spawning properly, this is just a temporary solution to get things working
-            CurrentBall = FindObjectOfType<BasketBall>();
-            CurrentBall.BallOwner = this;
-            CurrentBall.DisablePhysics();
-            CurrentBall.transform.position = ballSocket.position;
+            if (ballPrefab)
+            {
+                CurrentBall = Instantiate(ballPrefab, ballSocket.transform, true);
+                CurrentBall.BallOwner = this;
+                CurrentBall.OnBallReset();
+                CurrentBall.transform.position = ballSocket.position;
+            }
+            else 
+            {
+                Debug.LogError("Ball Prefab is not assigned on ShootingCharacter.");
+            }
         }
 
-        protected virtual void OnEnable()
+        protected virtual void Start()
         {
-            MatchManager.OnMatchEnd += ClearResetThrowCoroutine;
-            
             if (CoreUtility.TryGetGameMode(out GameplayGameMode gameplayGameMode))
             {
                 gameplayGameMode.MatchResultManager.RegisterParticipant(this);
             }
         }
 
+        protected virtual void OnEnable()
+        {
+            MatchManager.OnMatchTimeExpired += ClearResetThrowCoroutine;
+        }
+
         protected virtual void OnDisable()
         {
-            MatchManager.OnMatchEnd -= ClearResetThrowCoroutine;
-            
-            if (CoreUtility.TryGetGameMode(out GameplayGameMode gameplayGameMode))
-            {
-                gameplayGameMode.MatchResultManager.UnregisterParticipant(this);
-            }
+            MatchManager.OnMatchTimeExpired -= ClearResetThrowCoroutine;
         }
 
         protected virtual void OnThrowReset()
         {
-            // CurrentBall.DisablePhysics();
             CurrentBall.OnBallReset();
             CurrentBall.transform.position = ballSocket.position;
             CurrentBall.transform.parent = ballSocket.transform;
@@ -69,11 +75,15 @@ namespace BasketChallenge.Gameplay
 
         protected ThrowOutcome ThrowBall(Vector3 targetPosition, float powerAmount)
         {
-            // CurrentBall.EnablePhysics();
-            // CurrentBall.transform.parent = null;
+            if (CurrentBall == null)
+            {
+                Debug.LogError("No ball available to throw.");
+                return ThrowOutcome.None;
+            }
             LastThrowOutcome = ThrowerComponent.Throw(CurrentBall.Rigidbody, targetPosition, powerAmount);
             CurrentBall.OnBallThrown(LastThrowOutcome);
             _resetThrowCoroutine = StartCoroutine(ResetThrowAfterDelay());
+            Debug.Log(name + " performed a throw with outcome: " + LastThrowOutcome);
             return LastThrowOutcome;
         }
 

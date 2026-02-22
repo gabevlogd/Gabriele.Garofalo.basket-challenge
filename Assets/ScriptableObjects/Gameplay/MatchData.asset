@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startDelay: 3
   duration: 60
-  extraTimeDuration: 20
-  endDuration: 8
+  extraTimeDuration: 10
+  endDuration: 5

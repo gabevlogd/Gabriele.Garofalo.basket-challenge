@@ -17,11 +17,18 @@ namespace BasketChallenge.Gameplay
 
         private Vector3 _basketPosition;
 
+        private BasketBall _playerBall;
+
         private void Start()
         {
             _ballViewpoint = new GameObject("BallViewpoint");
             _basketPosition = ThrowPositionsHandler.GetPerfectThrowPosition() + Vector3.up * 3f;
             _defaultCameraLagSpeed = cameraLagSpeed;
+            
+            if (CoreUtility.TryGetPlayerControlledObject(out PlayerCharacter playerCharacter))
+            {
+                _playerBall = playerCharacter.CurrentBall;
+            }
         }
 
         private void OnEnable()
@@ -40,7 +47,10 @@ namespace BasketChallenge.Gameplay
         {
             if (_followBall)
             {
-                _ballViewpoint.transform.position = Vector3.Lerp(_ballViewpoint.transform.position, _basketPosition, Time.deltaTime * followBallSpeed);
+                Vector3 viewpointBasketDistance = Vector3.ProjectOnPlane(_basketPosition - _ballViewpoint.transform.position, Vector3.up);
+                Vector3 ballBasketDistance = Vector3.ProjectOnPlane(_basketPosition - _playerBall.transform.position, Vector3.up);
+                if (ballBasketDistance.magnitude < viewpointBasketDistance.magnitude)
+                    _ballViewpoint.transform.position = Vector3.Lerp(_ballViewpoint.transform.position, _basketPosition, Time.deltaTime * followBallSpeed);
             }
             
             if (_blendOutFollowBall)

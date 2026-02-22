@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireDuration: 15
   fireAmountPerScore: 0.4
-  fireAmountDecraseSpeed: 0.03
+  fireAmountDecraseSpeed: 0.01

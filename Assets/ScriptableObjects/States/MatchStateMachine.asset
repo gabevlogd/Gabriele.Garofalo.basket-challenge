@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3595376cce7a4cd58e66ccd974efabec, type: 3}
-  m_Name: StateMachine
+  m_Name: MatchStateMachine
   m_EditorClassIdentifier: 
   entryState: {fileID: 11400000, guid: 7a20f8cc16f10364da63e9dbe07fc910, type: 2}
   states:
   - {fileID: 11400000, guid: 3ab39957dbcb6dd43893fb2ff05c6e9a, type: 2}
   - {fileID: 11400000, guid: 2fd0ae0bbcbaf7d449385ce50c47cc3e, type: 2}
+  - {fileID: 11400000, guid: bebdff9c03564c04daa61a44dd796cf1, type: 2}

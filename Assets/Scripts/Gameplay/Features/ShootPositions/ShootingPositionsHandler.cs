@@ -20,12 +20,18 @@ namespace BasketChallenge.Gameplay
             }
 
             int randomIndex = Instance._lastRandomIndex;
-            while (randomIndex == Instance._lastRandomIndex)
+            while (randomIndex == Instance._lastRandomIndex || Instance.AlreadyTakenPosition(Instance.shootingPositions[randomIndex]))
             {
                 randomIndex = Random.Range(0, Instance.shootingPositions.Count);
             }
             Instance._lastRandomIndex = randomIndex;
             return Instance.shootingPositions[randomIndex];
+        }
+        
+        private bool AlreadyTakenPosition(Transform testPosition)
+        {
+            int playerMask = LayerMask.GetMask("Player");
+            return Physics.CheckSphere(testPosition.position, 0.5f, playerMask, QueryTriggerInteraction.Collide);
         }
     }
 }

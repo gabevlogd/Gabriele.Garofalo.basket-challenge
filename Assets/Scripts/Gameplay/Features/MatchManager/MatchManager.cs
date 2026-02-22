@@ -11,6 +11,7 @@ namespace BasketChallenge.Gameplay
         public static event Action<float> OnMatchStartDelayUpdate;
         public static event Action<float> OnMatchDurationUpdate; 
         public static event Action OnMatchEnd;
+        public static event Action OnMatchTimeExpired;
         
         public MatchData matchData;
         private StateMachine _stateMachine;
@@ -51,6 +52,11 @@ namespace BasketChallenge.Gameplay
         public void UpdateMatchDuration(float duration)
         {
             OnMatchDurationUpdate?.Invoke(duration);
+        }
+        
+        public void MatchTimeExpired()
+        {
+            OnMatchTimeExpired?.Invoke();
         }
     }
 }
