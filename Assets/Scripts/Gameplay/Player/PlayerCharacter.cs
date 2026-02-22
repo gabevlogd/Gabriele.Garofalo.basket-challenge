@@ -36,6 +36,7 @@ namespace BasketChallenge.Gameplay
             SwipeThrowController.OnThrowCompleted += ThrowBall;
             MatchManager.OnMatchStart += HandleMatchStart;
             MatchManager.OnMatchTimeExpired += DisableSwipeThrowAbility;
+            MatchManager.OnMatchEnd += HandleMatchEnd;
         }
         
         protected override void OnDisable()
@@ -44,6 +45,7 @@ namespace BasketChallenge.Gameplay
             SwipeThrowController.OnThrowCompleted -= ThrowBall;
             MatchManager.OnMatchStart -= HandleMatchStart;
             MatchManager.OnMatchTimeExpired -= DisableSwipeThrowAbility;
+            MatchManager.OnMatchEnd -= HandleMatchEnd;
         }
         
         private void ThrowBall(float powerAmount)
@@ -99,6 +101,36 @@ namespace BasketChallenge.Gameplay
                 gameplayHUD.ShowHUD();
             }
             ThrowerComponent.UpdatePerfectPower(ThrowPositionsHandler.GetPerfectThrowPosition(), ballSocket.position);
+        }
+        
+        private void HandleMatchEnd()
+        {
+            // Set the camera to a predefined end game viewpoint with smooth transitions
+            if (CoreUtility.TryGetPlayerCameraManager(out GameplayCameraManager cameraManager))
+            {
+                Transform endGameCameraViewpoint = EndGameTransformsHandler.Instance.CameraTrs;
+                cameraManager.SetNewCameraViewpoint(endGameCameraViewpoint);
+                cameraManager.useCameraViewpointPosition = true;
+                cameraManager.enableCameraLag = true;
+                cameraManager.cameraLagSpeed = 3f;
+                cameraManager.useCameraViewpointRotation = true;
+                cameraManager.enableCameraRotationLag = true;
+                cameraManager.cameraRotationLagSpeed = 2f;
+                cameraManager.PlayerCamera.transform.parent = null;
+            }
+            
+            // Move the player to a predefined end game position
+            Transform endGamePosition = EndGameTransformsHandler.Instance.PlayerTrs;
+            transform.position = endGamePosition.position;
+            transform.rotation = endGamePosition.rotation;
+
+            // Save the player's score and update high score if necessary
+            PlayerPrefs.SetInt("LastMatchScore", GetParticipantScore());
+            int highScore = PlayerPrefs.GetInt("HighScore", 0);
+            if (GetParticipantScore() > highScore)
+            {
+                PlayerPrefs.SetInt("HighScore", GetParticipantScore());
+            }
         }
     }
 }
