@@ -33,6 +33,7 @@ namespace BasketChallenge.Gameplay
                 
                 ball.HasScored = true;
                 OnScoreDetected?.Invoke(ball.BallOwner, ball.LastThrowOutcome);
+                SoundManager.Play("Net", false);
             }
         }
     }

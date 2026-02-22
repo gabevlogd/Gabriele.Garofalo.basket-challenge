@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using BasketChallenge.Core;
 using TMPro;
 using UnityEngine;
 
@@ -37,11 +38,18 @@ namespace BasketChallenge.Gameplay
             gameObject.SetActive(false);
         }
         
+        private int _lastDisplayedSecond = -1;
         private void UpdateStartDelayTimerText(float remainingDelay)
         {
             if (!timerText) return;
             TimeSpan timeSpan = TimeSpan.FromSeconds(remainingDelay);
-            timerText.text = $"{timeSpan.Seconds + 1:D1}";
+            int currentSecond = timeSpan.Seconds + 1; // Add 1 to show the correct countdown number
+            timerText.text = $"{currentSecond:D1}";
+            if (currentSecond != _lastDisplayedSecond)
+            {
+                SoundManager.Play("Countdown", false);
+                _lastDisplayedSecond = currentSecond;
+            }
         }
     }
 }

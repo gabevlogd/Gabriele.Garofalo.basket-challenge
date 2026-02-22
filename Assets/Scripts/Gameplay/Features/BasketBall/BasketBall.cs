@@ -1,4 +1,5 @@
 using System;
+using BasketChallenge.Core;
 using UnityEngine;
 
 namespace BasketChallenge.Gameplay
@@ -135,11 +136,14 @@ namespace BasketChallenge.Gameplay
             Rigidbody.isKinematic = true;
         }
         
+        private MyAudioSource _fireBallAudioSource;
+        
         private void BallIgnited()
         {
             if (_fireBallParticleSystemInstance)
             {
                 _fireBallParticleSystemInstance.Play();
+                _fireBallAudioSource = SoundManager.Play("FireBall", true);
             }
         }
 
@@ -148,6 +152,7 @@ namespace BasketChallenge.Gameplay
             if (_fireBallParticleSystemInstance)
             {
                 _fireBallParticleSystemInstance.Stop();
+                SoundManager.Stop(_fireBallAudioSource);
             }
         }
 

@@ -49,6 +49,7 @@ namespace BasketChallenge.Gameplay
         private void ThrowBall(float powerAmount)
         {
             ThrowBall(ThrowPositionsHandler.GetPerfectThrowPosition(), powerAmount);
+            SoundManager.Play("ThrowBall", false);
             DisableSwipeThrowAbility();
         }
 

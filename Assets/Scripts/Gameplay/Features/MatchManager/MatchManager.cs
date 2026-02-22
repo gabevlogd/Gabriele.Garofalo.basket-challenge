@@ -57,6 +57,7 @@ namespace BasketChallenge.Gameplay
         public void MatchTimeExpired()
         {
             OnMatchTimeExpired?.Invoke();
+            SoundManager.Play("EndMatch", false);
         }
     }
 }

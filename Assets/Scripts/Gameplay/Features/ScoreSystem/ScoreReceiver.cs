@@ -50,6 +50,8 @@ namespace BasketChallenge.Gameplay
             CurrentScore += scoreAmount;
             
             OnScoreUpdated?.Invoke(scoreOwner, CurrentScore);
+            
+            SoundManager.Play("Score", false);
         }
 
         private int GetScoreAmountForOutcome(ThrowOutcome scoreOutcome)

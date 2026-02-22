@@ -1,4 +1,5 @@
 using System;
+using BasketChallenge.Core;
 using UnityEngine;
 
 namespace BasketChallenge.Gameplay
@@ -27,6 +28,7 @@ namespace BasketChallenge.Gameplay
             if (other.TryGetComponent(out BasketBall ball))
             {
                 OnBackboardHit?.Invoke(ball);
+                SoundManager.Play("Backboard", false);
             }
         }
     }

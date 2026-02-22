@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84942af5e578c7d468950b279f6231b0, type: 3}
+  m_Name: AudioClipsData
+  m_EditorClassIdentifier: 
+  audioClips:
+  - {fileID: 8300000, guid: c9bc9082909335a42949e4c4bc5dcab0, type: 3}
+  - {fileID: 8300000, guid: c4f458a0b4d758448bab85d3f34e4e10, type: 3}
+  - {fileID: 8300000, guid: 84a351b4cd408084e942f0ff74674299, type: 3}
+  - {fileID: 8300000, guid: c301be497a294044cb595a0f11172a33, type: 3}
+  - {fileID: 8300000, guid: aec9e6bd7d635644ca9ef99d6c0812c8, type: 3}
+  - {fileID: 8300000, guid: d217155821815ab4788dbb6c08fb0ebf, type: 3}
+  - {fileID: 8300000, guid: 3c8dbfadd4b094f4abe29ea5083a7ec9, type: 3}
+  - {fileID: 8300000, guid: d217155821815ab4788dbb6c08fb0ebf, type: 3}
+  audioClipNames:
+  - Countdown
+  - ThrowBall
+  - Score
+  - FireBall
+  - Net
+  - Backboard
+  - EndMatch
+  - RimHit
