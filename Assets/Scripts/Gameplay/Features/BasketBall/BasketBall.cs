@@ -31,6 +31,8 @@ namespace BasketChallenge.Gameplay
 
         private int _collisionCount;
         
+        private BallMeshRotator _ballMesh;
+        
         protected void Awake()
         {
             if (!TryGetComponent(out _rigidbody))
@@ -41,6 +43,11 @@ namespace BasketChallenge.Gameplay
             if (!TryGetComponent(out _fireBallComponent))
             {
                 Debug.LogError("BasketBall requires a FireBallComponent to function properly.");
+            }
+            
+            if (transform.childCount > 0)
+            {
+                transform.GetChild(0).TryGetComponent(out _ballMesh);
             }
         }
 
@@ -77,6 +84,8 @@ namespace BasketChallenge.Gameplay
             lastBackboardBonus = null;
             EnablePhysics();
             transform.parent = null;
+            transform.rotation = Quaternion.LookRotation(Rigidbody.velocity, Vector3.up);
+            if (_ballMesh) _ballMesh.EnableRotation();
         }
 
         public void OnBallReset()
@@ -109,6 +118,8 @@ namespace BasketChallenge.Gameplay
                     // Nothing to do here, as the throw was already a miss, so no need to negate score
                     break;
             }
+            
+            if (_ballMesh) _ballMesh.DisableRotation();
         }
 
         private void ApplyVelocityCorrectionToScore()
