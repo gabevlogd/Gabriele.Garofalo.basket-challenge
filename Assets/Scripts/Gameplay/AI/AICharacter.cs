@@ -34,12 +34,14 @@ namespace BasketChallenge.Gameplay
         {
             base.OnEnable();
             MatchManager.OnMatchTimeExpired += StopPlaying;
+            DifficultyManager.OnDifficultyLevelChanged += UpdateBehaviourData;
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
             MatchManager.OnMatchTimeExpired -= StopPlaying;
+            DifficultyManager.OnDifficultyLevelChanged -= UpdateBehaviourData;
         }
 
         protected override void OnThrowReset()
@@ -76,6 +78,11 @@ namespace BasketChallenge.Gameplay
             Transform endGamePosition = EndGameTransformsHandler.Instance.OpponentTrs;
             transform.position = endGamePosition.position;
             transform.rotation = endGamePosition.rotation;
+        }
+        
+        private void UpdateBehaviourData(AIBehaviourData newData)
+        {
+            behaviourData = newData;
         }
     }
 }

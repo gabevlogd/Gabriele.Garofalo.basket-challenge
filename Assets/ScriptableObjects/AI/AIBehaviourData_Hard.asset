@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d9c8f14b793946b791c979a917b36776, type: 3}
-  m_Name: AIBehaviourData
+  m_Name: AIBehaviourData_Hard
   m_EditorClassIdentifier: 
-  throwDelayMin: 1
-  throwDelayMax: 2
+  throwDelayMin: 0.1
+  throwDelayMax: 0.5
   perfectThrowWeight: 1
-  backboardThrowWeight: 0.9
+  backboardThrowWeight: 1
   nearRimThrowWeight: 1.1
   farRimThrowWeight: 1.1
-  shortMissThrowWeight: 1.4
-  longMissThrowWeight: 1.4
-  backboardMissThrowWeight: 0.8
+  shortMissThrowWeight: 0.1
+  longMissThrowWeight: 0.1
+  backboardMissThrowWeight: 0.1

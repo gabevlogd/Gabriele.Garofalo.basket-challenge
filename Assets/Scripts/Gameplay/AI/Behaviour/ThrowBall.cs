@@ -29,20 +29,22 @@ namespace BasketChallenge.Gameplay
                 thrower.OnPerfectPowerUpdated += perfectPower => _currentPerfectPower = perfectPower;
 
                 _powerProcessor = thrower.PowerProcessor;
-
-                _perfectThrowWeight = AICharacter.behaviourData.perfectThrowWeight;
-                _backboardThrowWeight = AICharacter.behaviourData.backboardThrowWeight;
-                _nearRimThrowWeight = AICharacter.behaviourData.nearRimThrowWeight;
-                _farRimThrowWeight = AICharacter.behaviourData.farRimThrowWeight;
-                _shortMissThrowWeight = AICharacter.behaviourData.shortMissThrowWeight;
-                _longMissThrowWeight = AICharacter.behaviourData.longMissThrowWeight;
-                _backboardMissThrowWeight = AICharacter.behaviourData.backboardMissThrowWeight;
             }
         }
 
         protected override void OnEnter()
         {
             base.OnEnter();
+            
+            // cache weights each time we enter the state in case they were updated by a difficulty change:
+            _perfectThrowWeight = AICharacter.behaviourData.perfectThrowWeight;
+            _backboardThrowWeight = AICharacter.behaviourData.backboardThrowWeight;
+            _nearRimThrowWeight = AICharacter.behaviourData.nearRimThrowWeight;
+            _farRimThrowWeight = AICharacter.behaviourData.farRimThrowWeight;
+            _shortMissThrowWeight = AICharacter.behaviourData.shortMissThrowWeight;
+            _longMissThrowWeight = AICharacter.behaviourData.longMissThrowWeight;
+            _backboardMissThrowWeight = AICharacter.behaviourData.backboardMissThrowWeight;
+            
             AICharacter.UpdatePerfectPower();
             _throwCoroutine = AICharacter.StartCoroutine(ThrowDelay());
         }

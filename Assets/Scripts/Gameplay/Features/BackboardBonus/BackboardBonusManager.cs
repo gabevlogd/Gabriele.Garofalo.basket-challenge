@@ -35,9 +35,8 @@ namespace BasketChallenge.Gameplay
             }
             
             ScoreDetector.OnScoreDetected += HandleScoreDetected;
+            MatchManager.OnMatchStart += HandleMatchStart;
             MatchManager.OnMatchEnd += HandleMatchEnd;
-            
-            _randomBonusCoroutine = StartCoroutine(RandomBonusTrigger());
         }
 
         private void OnDisable()
@@ -48,6 +47,7 @@ namespace BasketChallenge.Gameplay
             }
             
             ScoreDetector.OnScoreDetected -= HandleScoreDetected;
+            MatchManager.OnMatchStart -= HandleMatchStart;
             MatchManager.OnMatchEnd -= HandleMatchEnd;
             
             if (_randomBonusCoroutine != null)
@@ -74,6 +74,11 @@ namespace BasketChallenge.Gameplay
             {
                 ball.lastBackboardBonus = _currentBonus;
             }
+        }
+        
+        private void HandleMatchStart()
+        {
+            _randomBonusCoroutine = StartCoroutine(RandomBonusTrigger());
         }
         
         private void HandleMatchEnd()
