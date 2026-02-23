@@ -63,7 +63,7 @@ namespace BasketChallenge.Gameplay
 
         public void UpdatePerfectPower()
         {
-            ThrowerComponent.UpdatePerfectPower(ThrowPositionsHandler.GetPerfectThrowPosition(), ballSocket.position);
+            ThrowerComponent.UpdatePerfectPower(ThrowPositionsHandler.GetPerfectThrowPosition());
         }
 
         private void StopPlaying()

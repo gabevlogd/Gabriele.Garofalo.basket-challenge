@@ -26,12 +26,14 @@ namespace BasketChallenge.Gameplay
         
         private ThrowOutcome _lastThrowOutcome;
         
+        private float _perfectPowerAmount = -1f;
+        
         public event Action<float> OnPerfectPowerUpdated;
 
-        public void UpdatePerfectPower(Vector3 targetPosition, Vector3 startPosition)
+        public void UpdatePerfectPower(Vector3 targetPosition)
         {
-            float perfectPower = GetPerfectPowerAmount(targetPosition, startPosition);
-            OnPerfectPowerUpdated?.Invoke(perfectPower);
+            _perfectPowerAmount = GetPerfectPowerAmount(targetPosition, transform.position);
+            OnPerfectPowerUpdated?.Invoke(_perfectPowerAmount);
         }
 
         public ThrowOutcome Throw(Rigidbody objectToThrow, Vector3 targetPosition, float powerAmount = -1f)
@@ -75,9 +77,15 @@ namespace BasketChallenge.Gameplay
         private Vector3 GetAdjustedTargetPosition(float powerAmount, Vector3 startPosition, Vector3 targetPosition)
         {
             powerAmount = Mathf.Clamp(powerAmount, 0f, 1f);
-            float perfectPowerAmount = GetPerfectPowerAmount(targetPosition, startPosition);
-            _lastThrowOutcome  = powerProcessor.EvaluateThrowOutcome(powerAmount, perfectPowerAmount);
-            return targetPosition + CalculateAdjustment(_lastThrowOutcome, startPosition, targetPosition, powerAmount, perfectPowerAmount);
+            
+            // If perfect power amount has not been calculated yet, calculate it now using the current target position and start position.
+            if (_perfectPowerAmount < 0f) 
+            {
+                UpdatePerfectPower(targetPosition);
+            }
+            
+            _lastThrowOutcome  = powerProcessor.EvaluateThrowOutcome(powerAmount, _perfectPowerAmount);
+            return targetPosition + CalculateAdjustment(_lastThrowOutcome, startPosition, targetPosition, powerAmount, _perfectPowerAmount);
         }
         
         /// <summary>

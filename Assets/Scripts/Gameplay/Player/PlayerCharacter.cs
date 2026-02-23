@@ -65,7 +65,7 @@ namespace BasketChallenge.Gameplay
             }
             
             ResetCameraPosition();
-            ThrowerComponent.UpdatePerfectPower(ThrowPositionsHandler.GetPerfectThrowPosition(), ballSocket.position);
+            ThrowerComponent.UpdatePerfectPower(ThrowPositionsHandler.GetPerfectThrowPosition());
             EnableSwipeThrowAbility();
             OnThrowResetEvent?.Invoke();
         }
@@ -100,7 +100,7 @@ namespace BasketChallenge.Gameplay
             {
                 gameplayHUD.ShowHUD();
             }
-            ThrowerComponent.UpdatePerfectPower(ThrowPositionsHandler.GetPerfectThrowPosition(), ballSocket.position);
+            ThrowerComponent.UpdatePerfectPower(ThrowPositionsHandler.GetPerfectThrowPosition());
         }
         
         private void HandleMatchEnd()
