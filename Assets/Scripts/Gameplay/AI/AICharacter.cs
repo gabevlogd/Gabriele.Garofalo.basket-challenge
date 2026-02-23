@@ -34,14 +34,12 @@ namespace BasketChallenge.Gameplay
         {
             base.OnEnable();
             MatchManager.OnMatchTimeExpired += StopPlaying;
-            MatchManager.OnMatchEnd += HandleMatchEnd;
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
             MatchManager.OnMatchTimeExpired -= StopPlaying;
-            MatchManager.OnMatchEnd -= HandleMatchEnd;
         }
 
         protected override void OnThrowReset()
@@ -56,9 +54,9 @@ namespace BasketChallenge.Gameplay
             _stateMachine.ChangeState<ThrowBall>();
         }
 
-        public void ThrowBall(float powerAmount)
+        public void StartThrowing(float powerAmount)
         {
-            ThrowBall(ThrowPositionsHandler.GetPerfectThrowPosition(), powerAmount);
+            StartThrowing(ThrowPositionsHandler.GetPerfectThrowPosition(), powerAmount);
         }
 
         public void UpdatePerfectPower()
@@ -70,9 +68,11 @@ namespace BasketChallenge.Gameplay
         {
             _stateMachine.ChangeState<Wait>();
         }
-        
-        private void HandleMatchEnd()
+
+        protected override void HandleMatchEnd()
         {
+            base.HandleMatchEnd();
+            // Move the character to a predefined end game position
             Transform endGamePosition = EndGameTransformsHandler.Instance.OpponentTrs;
             transform.position = endGamePosition.position;
             transform.rotation = endGamePosition.rotation;

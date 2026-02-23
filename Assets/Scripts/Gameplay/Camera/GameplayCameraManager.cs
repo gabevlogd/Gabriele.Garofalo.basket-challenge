@@ -28,18 +28,19 @@ namespace BasketChallenge.Gameplay
             if (CoreUtility.TryGetPlayerControlledObject(out PlayerCharacter playerCharacter))
             {
                 _playerBall = playerCharacter.CurrentBall;
+                
+                if (!playerCharacter.skinnedMeshComponent.SkinnedMesh.TryGetComponent(out CharacterAnimEvents animEvents)) return;
+                animEvents.OnThrowAnimationEvent += CameraStartFollowBall;
             }
         }
 
         private void OnEnable()
         {
-            SwipeThrowController.OnThrowCompleted += CameraStartFollowBall;
             PlayerCharacter.OnThrowResetEvent += StopCameraFollowBall;
         }
 
         private void OnDisable()
         {
-            SwipeThrowController.OnThrowCompleted -= CameraStartFollowBall;
             PlayerCharacter.OnThrowResetEvent -= StopCameraFollowBall;
         }
 
@@ -70,7 +71,7 @@ namespace BasketChallenge.Gameplay
             
         }
 
-        private void CameraStartFollowBall(float powerAmount)
+        private void CameraStartFollowBall()
         {
             if (!CoreUtility.TryGetPlayerControlledObject(out PlayerCharacter playerCharacter)) return;
             if (!playerCharacter.CurrentBall) return;

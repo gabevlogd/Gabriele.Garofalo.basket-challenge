@@ -28,30 +28,32 @@ namespace BasketChallenge.Gameplay
         {
             base.Start();
             DisableSwipeThrowAbility();
+            
+            if (skinnedMeshComponent.SkinnedMesh.TryGetComponent(out CharacterAnimEvents animEvents))
+            {
+                animEvents.OnThrowAnimationEvent += () => SoundManager.Play("ThrowBall", false);
+            }
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
-            SwipeThrowController.OnThrowCompleted += ThrowBall;
+            SwipeThrowController.OnThrowCompleted += StartThrowing;
             MatchManager.OnMatchStart += HandleMatchStart;
             MatchManager.OnMatchTimeExpired += DisableSwipeThrowAbility;
-            MatchManager.OnMatchEnd += HandleMatchEnd;
         }
         
         protected override void OnDisable()
         {
             base.OnDisable();
-            SwipeThrowController.OnThrowCompleted -= ThrowBall;
+            SwipeThrowController.OnThrowCompleted -= StartThrowing;
             MatchManager.OnMatchStart -= HandleMatchStart;
             MatchManager.OnMatchTimeExpired -= DisableSwipeThrowAbility;
-            MatchManager.OnMatchEnd -= HandleMatchEnd;
         }
         
-        private void ThrowBall(float powerAmount)
+        private void StartThrowing(float powerAmount)
         {
-            ThrowBall(ThrowPositionsHandler.GetPerfectThrowPosition(), powerAmount);
-            SoundManager.Play("ThrowBall", false);
+            StartThrowing(ThrowPositionsHandler.GetPerfectThrowPosition(), powerAmount);
             DisableSwipeThrowAbility();
         }
 
@@ -103,8 +105,10 @@ namespace BasketChallenge.Gameplay
             ThrowerComponent.UpdatePerfectPower(ThrowPositionsHandler.GetPerfectThrowPosition());
         }
         
-        private void HandleMatchEnd()
+        protected override void HandleMatchEnd()
         {
+            base.HandleMatchEnd();
+            
             // Set the camera to a predefined end game viewpoint with smooth transitions
             if (CoreUtility.TryGetPlayerCameraManager(out GameplayCameraManager cameraManager))
             {
@@ -119,7 +123,7 @@ namespace BasketChallenge.Gameplay
                 cameraManager.PlayerCamera.transform.parent = null;
             }
             
-            // Move the player to a predefined end game position
+            // Move the character to a predefined end game position
             Transform endGamePosition = EndGameTransformsHandler.Instance.PlayerTrs;
             transform.position = endGamePosition.position;
             transform.rotation = endGamePosition.rotation;

@@ -109,8 +109,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1a02705a755fd34d908aca7a112ac6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skinnedMesh: {fileID: 8257961463907981079}
-  _animator: {fileID: 3400728214028687319}
+  skinnedMesh: {fileID: 8257961463907981079}
+  animator: {fileID: 3400728214028687319}
 --- !u!114 &8512123295654633304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -506,7 +506,7 @@ PrefabInstance:
     - target: {fileID: 5866666021909216657, guid: 950735d05f1d992438c56f851ccf2354,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 950735d05f1d992438c56f851ccf2354,
         type: 3}
@@ -602,6 +602,18 @@ CapsuleCollider:
   m_Height: 3.7
   m_Direction: 1
   m_Center: {x: 0, y: 1.8, z: 0}
+--- !u!114 &6157122318243860216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8257961463907981079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eecc642e4b354594b801e0cf2b713ae4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8778074906197347757 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 950735d05f1d992438c56f851ccf2354,

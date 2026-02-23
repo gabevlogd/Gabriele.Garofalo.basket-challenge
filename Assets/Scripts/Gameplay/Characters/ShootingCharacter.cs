@@ -17,6 +17,10 @@ namespace BasketChallenge.Gameplay
         
         protected ThrowOutcome LastThrowOutcome;
         
+        protected float CurrentThrowPower;
+        
+        protected Vector3 CurrentThrowTarget;
+        
         [SerializeField]
         protected Transform ballSocket;
         
@@ -27,6 +31,10 @@ namespace BasketChallenge.Gameplay
         
         private readonly Guid _id = Guid.NewGuid();
 
+        private static readonly int IsThrowing = Animator.StringToHash("IsThrowing");
+        private static readonly int Win = Animator.StringToHash("Win");
+        private static readonly int Lose = Animator.StringToHash("Lose");
+        
         protected override void Awake()
         {
             base.Awake();
@@ -46,6 +54,10 @@ namespace BasketChallenge.Gameplay
             {
                 Debug.LogError("Ball Prefab is not assigned on ShootingCharacter.");
             }
+
+            if (!skinnedMeshComponent.SkinnedMesh.TryGetComponent(out CharacterAnimEvents animEvents)) return;
+            animEvents.OnThrowAnimationEvent += ThrowBall;
+            animEvents.OnThrowCompleteAnimationEvent += StopThrowAnimation;
         }
 
         protected virtual void Start()
@@ -59,11 +71,13 @@ namespace BasketChallenge.Gameplay
         protected virtual void OnEnable()
         {
             MatchManager.OnMatchTimeExpired += ClearResetThrowCoroutine;
+            MatchManager.OnMatchEnd += HandleMatchEnd;
         }
 
         protected virtual void OnDisable()
         {
             MatchManager.OnMatchTimeExpired -= ClearResetThrowCoroutine;
+            MatchManager.OnMatchEnd -= HandleMatchEnd;
         }
 
         protected virtual void OnThrowReset()
@@ -71,20 +85,43 @@ namespace BasketChallenge.Gameplay
             CurrentBall.OnBallReset();
             CurrentBall.transform.position = ballSocket.position;
             CurrentBall.transform.parent = ballSocket.transform;
+            CurrentThrowPower = 0f;
+            CurrentThrowTarget = Vector3.zero;
         }
 
-        protected ThrowOutcome ThrowBall(Vector3 targetPosition, float powerAmount)
+        /// <summary>
+        /// This method caches the target position and power for the throw, and triggers the throw animation.
+        /// The actual throwing of the ball will be handled by the ThrowBall method, which is called by an animation event during the throw animation.
+        /// This separation allows for better synchronization between the animation and the gameplay mechanics of throwing the ball.
+        /// </summary>
+        protected void StartThrowing(Vector3 targetPosition, float powerAmount)
+        {
+            CurrentThrowPower = powerAmount;
+            CurrentThrowTarget = targetPosition;
+            skinnedMeshComponent.Animator.SetBool(IsThrowing, true);
+        }
+        
+        private void StopThrowAnimation()
+        {
+            skinnedMeshComponent.Animator.SetBool(IsThrowing, false);
+        }
+
+        private void ThrowBall()
+        {
+            ThrowBall(CurrentThrowTarget, CurrentThrowPower);
+        }
+
+        private void ThrowBall(Vector3 targetPosition, float powerAmount)
         {
             if (CurrentBall == null)
             {
                 Debug.LogError("No ball available to throw.");
-                return ThrowOutcome.None;
+                return;
             }
             LastThrowOutcome = ThrowerComponent.Throw(CurrentBall.Rigidbody, targetPosition, powerAmount);
             CurrentBall.OnBallThrown(LastThrowOutcome);
             _resetThrowCoroutine = StartCoroutine(ResetThrowAfterDelay());
             Debug.Log(name + " performed a throw with outcome: " + LastThrowOutcome);
-            return LastThrowOutcome;
         }
 
         private IEnumerator ResetThrowAfterDelay()
@@ -100,6 +137,16 @@ namespace BasketChallenge.Gameplay
                 StopCoroutine(_resetThrowCoroutine);
                 _resetThrowCoroutine = null;
             }
+        }
+
+        protected virtual void HandleMatchEnd()
+        {
+            ClearResetThrowCoroutine();
+            
+            // Set the appropriate win/lose animation based on the match result
+            if (!CoreUtility.TryGetGameMode(out GameplayGameMode gameplayGameMode)) return;
+            MatchResult result = gameplayGameMode.MatchResultManager.GetMatchResult();
+            skinnedMeshComponent.Animator.SetBool(result.Winners.Contains(this) ? Win : Lose, true);
         }
 
         public Guid GetParticipantId()

@@ -116,7 +116,7 @@ namespace BasketChallenge.Gameplay
             float power = Random.Range(min, max);
 
             // Throw the ball with the calculated power
-            AICharacter.ThrowBall(power);
+            AICharacter.StartThrowing(power);
         }
     }
 }

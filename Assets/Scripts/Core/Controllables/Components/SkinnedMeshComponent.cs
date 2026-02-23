@@ -1,15 +1,14 @@
-using System;
 using UnityEngine;
 
 namespace BasketChallenge.Core
 {
     public class SkinnedMeshComponent : MonoBehaviour
     {
-        [SerializeField]
-        protected GameObject _skinnedMesh;
+        [SerializeField] protected GameObject skinnedMesh;
+        public GameObject SkinnedMesh => skinnedMesh;
         
-        [SerializeField]
-        protected Animator _animator;
+        [SerializeField] protected Animator animator;
+        public Animator Animator => animator;
         
         /// <summary>
         /// Tries to find a socket (a child GameObject) by name under the SkinnedMesh. This is useful for attaching items,
@@ -21,7 +20,7 @@ namespace BasketChallenge.Core
         /// <returns></returns>
         public bool TryGetSocketTransform(string socketName, out Transform socketTransform)
         {
-            socketTransform = _skinnedMesh.transform.Find(socketName);
+            socketTransform = skinnedMesh.transform.Find(socketName);
             if (!socketTransform)
             {
                 Debug.LogWarning($"Socket '{socketName}' not found in SkinnedMeshComponent.");
