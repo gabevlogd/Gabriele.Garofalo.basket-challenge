@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: MatchData
   m_EditorClassIdentifier: 
   startDelay: 3
-  duration: 60
-  extraTimeDuration: 10
-  endDuration: 10
+  duration: 120
+  extraTimeDuration: 15
+  endDuration: 7
